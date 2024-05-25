@@ -44,15 +44,15 @@ extern unsigned long memtrack_qty;
 
 // Compiling Phase
 typedef enum _phase_enum {
-    /* 0 */INIT,
-    /* 1 */LEXICAL,
-    /* 2 */SYNTAX,
-    /* 3 */SEMANTIC,
-    /* 4 */IR,
-    /* 5 */CODE_GEN,
-    /* 6 */ASSEMBLE,
-    /* 7 */LINK,
-    /* 8 */SUCCESS
+    INIT,     // 0x01
+    LEXICAL,  // 0x02
+    SYNTAX,   // 0x03
+    SEMANTIC, // 0x04
+    IR,       // 0x05
+    CODE_GEN, // 0x06
+    ASSEMBLE, // 0x07
+    LINK,     // 0x08
+    SUCCESS   // 0x09
 } phase_t;
 
 #endif /* _COMMON_H_ */

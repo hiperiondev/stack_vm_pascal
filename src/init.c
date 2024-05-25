@@ -25,8 +25,8 @@
 #include <unistd.h>
 
 // constants
-char PL0E_NAME[MAXSTRLEN] = "pcc";
-char PL0E_VERSION[MAXSTRLEN] = "v1.2.3";
+char PL0E_NAME[MAXSTRLEN] = "stack_vm_pascal";
+char PL0E_VERSION[MAXSTRLEN] = "v0.0.1";
 char PL0E_INPUT[MAXSTRLEN] = "input.pas";
 char PL0E_ASSEM[MAXSTRLEN] = "input.s";
 char PL0E_OBJECT[MAXSTRLEN] = "input.o";

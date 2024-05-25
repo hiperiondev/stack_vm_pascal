@@ -28,16 +28,16 @@ extern int toklineno;
 
 // gettok states
 typedef enum _state_enum {
-    /* 0 */START,
-    /* 1 */INSTR,
-    /* 2 */INUNS,
-    /* 3 */INIDE,
-    /* 4 */INLES,
-    /* 5 */INCOM,
-    /* 6 */INGRE,
-    /* 7 */INCHA,
-    /* 8 */INCMT,
-    /* 9 */DONE
+    START, // 0x00
+    INSTR, // 0x01
+    INUNS, // 0x02
+    INIDE, // 0x03
+    INLES, // 0x04
+    INCOM, // 0x05
+    INGRE, // 0x06
+    INCHA, // 0x07
+    INCMT, // 0x08
+    DONE   // 0x09
 } state_t;
 
 // get next token

@@ -67,7 +67,7 @@ struct _function_struct {
     bb_t *btail; // next of btail is EXIT
 
     // store variables in LVA
-    int total;		   // total variables
+    int total;		           // total variables
     syment_t *vars[MAXSYMENT]; // symbol entry
     int seqs[MAXSYMENT];	   // variable sequence
 
@@ -76,11 +76,11 @@ struct _function_struct {
 
 struct _basic_block_struct {
     // basic information
-    int bid;		  // block ID
-    int total;		  // total number of instructions
+    int bid;		          // block ID
+    int total;		          // total number of instructions
     inst_t *insts[MAXBBINST]; // instructions
-    fun_t *fun;		  // which fun_t belongs to
-    bb_t *next;		  // next BB
+    fun_t *fun;		          // which fun_t belongs to
+    bb_t *next;		          // next BB
 
     // links
     bb_t *pred[MAXBBLINK]; // predecessors

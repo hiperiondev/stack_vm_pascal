@@ -58,10 +58,10 @@ static type_t infer_term_type(term_node_t *node);
 static type_t infer_factor_type(factor_node_t *node);
 
 char *typerepr[4] = {
-        [0] = "$V", /* VOID_TYPE */
-        [1] = "$I", /* INT_TYPE  */
-        [2] = "$C", /* CHAR_TYPE */
-        [3] = "$S", /* STR_TYPE  */
+        [0] = "$V", // VOID_TYPE
+        [1] = "$I", // INT_TYPE
+        [2] = "$C", // CHAR_TYPE
+        [3] = "$S", // STR_TYPE
 };
 
 static type_t infer_expr_type(expr_node_t *node) {

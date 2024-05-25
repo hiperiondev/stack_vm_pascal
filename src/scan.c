@@ -123,7 +123,7 @@ token_t gettok(void) {
                     }
                 }
                 break;
-            case INCMT: /* in comment */
+            case INCMT: // in comment
                 save = FALSE;
                 if (ch == EOF) {
                     state = DONE;
@@ -132,7 +132,7 @@ token_t gettok(void) {
                     state = START;
                 }
                 break;
-            case INSTR: /* in string */
+            case INSTR: // in string
                 if (ch == '"') {
                     state = DONE;
                     save = FALSE;
@@ -150,7 +150,7 @@ token_t gettok(void) {
                     }
                 }
                 break;
-            case INCHA: /* in character */
+            case INCHA: // in character
                 if (ch == '\'') {
                     state = DONE;
                     save = FALSE;
@@ -166,7 +166,7 @@ token_t gettok(void) {
                     }
                 }
                 break;
-            case INUNS: /* in unsign number */
+            case INUNS: // in unsign number
                 if (!isdigit(ch)) {
                     unreadc();
                     save = FALSE;
@@ -174,7 +174,7 @@ token_t gettok(void) {
                     curr = MC_UNS;
                 }
                 break;
-            case INIDE: /* in identifier */
+            case INIDE: // in identifier
                 if (!(isdigit(ch) || isalpha(ch))) {
                     unreadc();
                     save = FALSE;
@@ -182,7 +182,7 @@ token_t gettok(void) {
                     curr = MC_ID;
                 }
                 break;
-            case INLES: /* in less than */
+            case INLES: // in less than
                 state = DONE;
                 if (ch == '=') {
                     curr = SS_LEQ;
@@ -194,7 +194,7 @@ token_t gettok(void) {
                     curr = SS_LST;
                 }
                 break;
-            case INCOM: /* in comma */
+            case INCOM: // in comma
                 state = DONE;
                 if (ch == '=') {
                     curr = SS_ASGN;
@@ -204,7 +204,7 @@ token_t gettok(void) {
                     curr = SS_COLON;
                 }
                 break;
-            case INGRE: /* in great than */
+            case INGRE: // in great than
                 state = DONE;
                 if (ch == '=') {
                     curr = SS_GEQ;
@@ -292,27 +292,28 @@ static struct _pl0e_keywords_struct {
     // represented token
     token_t tok;
 } PL0E_KEYWORDS[] = {
-/*  0 */{ "array", KW_ARRAY },
-/*  1 */{ "begin", KW_BEGIN },
-/*  2 */{ "char", KW_CHAR },
-/*  3 */{ "const", KW_CONST },
-/*  4 */{ "do", KW_DO },
-/*  5 */{ "downto", KW_DOWNTO },
-/*  6 */{ "else", KW_ELSE },
-/*  7 */{ "end", KW_END },
-/*  8 */{ "for", KW_FOR },
-/*  9 */{ "function", KW_FUNCTION },
-/* 10 */{ "if", KW_IF },
-/* 11 */{ "integer", KW_INTEGER },
-/* 12 */{ "of", KW_OF },
-/* 13 */{ "procedure", KW_PROCEDURE },
-/* 14 */{ "read", KW_READ },
-/* 15 */{ "repeat", KW_REPEAT },
-/* 16 */{ "then", KW_THEN },
-/* 17 */{ "to", KW_TO },
-/* 18 */{ "until", KW_UNTIL },
-/* 19 */{ "var", KW_VAR },
-/* 20 */{ "write", KW_WRITE } };
+        { "array",     KW_ARRAY     }, //
+        { "begin",     KW_BEGIN     }, //
+        { "char",      KW_CHAR      }, //
+        { "const",     KW_CONST     }, //
+        { "do",        KW_DO        }, //
+        { "downto",    KW_DOWNTO    }, //
+        { "else",      KW_ELSE      }, //
+        { "end",       KW_END       }, //
+        { "for",       KW_FOR       }, //
+        { "function",  KW_FUNCTION  }, //
+        { "if",        KW_IF        }, //
+        { "integer",   KW_INTEGER   }, //
+        { "of",        KW_OF        }, //
+        { "procedure", KW_PROCEDURE }, //
+        { "read",      KW_READ      }, //
+        { "repeat",    KW_REPEAT    }, //
+        { "then",      KW_THEN      }, //
+        { "to",        KW_TO        }, //
+        { "until",     KW_UNTIL     }, //
+        { "var",       KW_VAR       }, //
+        { "write",     KW_WRITE     }  //
+};
 
 #define MAXRESERVED (sizeof(PL0E_KEYWORDS) / sizeof(PL0E_KEYWORDS[0]))
 

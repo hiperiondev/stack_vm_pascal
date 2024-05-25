@@ -22,14 +22,14 @@
 #include "parse.h"
 #include "symtab.h"
 
-/* program */
+// program
 struct _pgm_node {
     int nid;
     block_node_t *bp;
     ident_node_t *entry;
 };
 
-/* block */
+// block
 struct _block_node {
     int nid;
     const_dec_node_t *cdp;
@@ -62,8 +62,8 @@ struct _var_def_node {
 };
 
 typedef enum _pf_dec_enum {
-    FUN_PFDEC,
-    PROC_PFDEC
+    FUN_PFDEC, //
+    PROC_PFDEC //
 } pf_dec_t;
 
 struct _pf_dec_list_node {
@@ -109,17 +109,17 @@ struct _fun_head_node {
     para_list_node_t *plp;
 };
 
-/* statement */
+// statement
 typedef enum _stmt_enum {
-    ASSGIN_STMT,
-    IF_STMT,
-    REPEAT_STMT,
-    PCALL_STMT,
-    COMP_STMT,
-    READ_STMT,
-    WRITE_STMT,
-    FOR_STMT,
-    NULL_STMT
+    ASSGIN_STMT, //
+    IF_STMT,     //
+    REPEAT_STMT, //
+    PCALL_STMT,  //
+    COMP_STMT,   //
+    READ_STMT,   //
+    WRITE_STMT,  //
+    FOR_STMT,    //
+    NULL_STMT    //
 } stmt_t;
 
 struct _stmt_node {
@@ -136,9 +136,9 @@ struct _stmt_node {
 };
 
 typedef enum _assgin_enum {
-    NORM_ASSGIN,
-    FUN_ASSGIN,
-    ARRAY_ASSGIN
+    NORM_ASSGIN, //
+    FUN_ASSGIN,  //
+    ARRAY_ASSGIN //
 } assgin_t;
 
 struct _assign_stmt_node {
@@ -152,9 +152,9 @@ struct _assign_stmt_node {
 struct _if_stmt_node {
     int nid;
     cond_node_t *cp;
-    /* then */
+    // then
     stmt_node_t *tp;
-    /* else */
+    // else
     stmt_node_t *ep;
     symtab_t *stab;
 };
@@ -167,8 +167,8 @@ struct _repe_stmt_node {
 };
 
 typedef enum _for_enum {
-    TO_FOR,
-    DOWNTO_FOR
+    TO_FOR,    //
+    DOWNTO_FOR //
 } for_t;
 
 struct _for_stmt_node {
@@ -206,26 +206,26 @@ struct _read_stmt_node {
     read_stmt_node_t *next;
 };
 typedef enum _write_enum {
-    STRID_WRITE,
-    STR_WRITE,
-    ID_WRITE
+    STRID_WRITE, //
+    STR_WRITE,   //
+    ID_WRITE     //
 } write_t;
 
 struct _write_stmt_node {
     int nid;
     write_t type;
-    /* string pointer */
+    // string pointer
     char sp[MAXSTRLEN];
     expr_node_t *ep;
     symtab_t *stab;
 };
 
-/* expression term factor condition */
+// expression term factor condition
 typedef enum _addop_enum {
-    NOP_ADDOP,
-    NEG_ADDOP,
-    ADD_ADDOP,
-    MINUS_ADDOP
+    NOP_ADDOP,  //
+    NEG_ADDOP,  //
+    ADD_ADDOP,  //
+    MINUS_ADDOP //
 } addop_t;
 
 struct _expr_node {
@@ -237,9 +237,9 @@ struct _expr_node {
 };
 
 typedef enum _multop_enum {
-    NOP_MULTOP,
-    MULT_MULTOP,
-    DIV_MULTOP
+    NOP_MULTOP,  //
+    MULT_MULTOP, //
+    DIV_MULTOP   //
 } multop_t;
 
 struct _term_node {
@@ -251,12 +251,12 @@ struct _term_node {
 };
 
 typedef enum _factor_enum {
-    ID_FACTOR,
-    ARRAY_FACTOR,
-    UNSIGN_FACTOR,
-    CHAR_FACTOR,
-    EXPR_FACTOR,
-    FUNCALL_FACTOR
+    ID_FACTOR,     //
+    ARRAY_FACTOR,  //
+    UNSIGN_FACTOR, //
+    CHAR_FACTOR,   //
+    EXPR_FACTOR,   //
+    FUNCALL_FACTOR //
 } factor_t;
 
 struct _factor_node {
@@ -271,12 +271,12 @@ struct _factor_node {
 };
 
 typedef enum _rela_enum {
-    EQU_RELA,
-    NEQ_RELA,
-    GTT_RELA,
-    GEQ_RELA,
-    LST_RELA,
-    LEQ_RELA
+    EQU_RELA, //
+    NEQ_RELA, //
+    GTT_RELA, //
+    GEQ_RELA, //
+    LST_RELA, //
+    LEQ_RELA  //
 } rela_t;
 
 struct _cond_node {
@@ -287,26 +287,29 @@ struct _cond_node {
     symtab_t *stab;
 };
 
-/* ident parameter argument*/
+// ident parameter argument
 typedef enum _ident_enum {
     // Normal Identifier
-    /*  0 */INIT_IDENT,
-    /*  1 */PROC_IDENT,
-    /*  2 */INT_FUN_IDENT,
-    /*  3 */CHAR_FUN_IDENT,
+    INIT_IDENT,        // 0x00
+    PROC_IDENT,        // 0x01
+    INT_FUN_IDENT,     // 0x02
+    CHAR_FUN_IDENT,    // 0x03
+
     // Const Identifier
-    /*  4 */INT_CONST_IDENT,
-    /*  5 */CHAR_CONST_IDENT,
+    INT_CONST_IDENT,   // 0x04
+    CHAR_CONST_IDENT,  // 0x05
+
     // Variable Identifier
-    /*  6 */INT_VAR_IDENT,
-    /*  7 */CHAR_VAR_IDENT,
-    /*  8 */INT_ARRVAR_IDENT,
-    /*  9 */CHAR_ARRVAR_IDENT,
+    INT_VAR_IDENT,     // 0x06
+    CHAR_VAR_IDENT,    // 0x07
+    INT_ARRVAR_IDENT,  // 0x08
+    CHAR_ARRVAR_IDENT, // 0x09
+
     // Parameter Identifier, (by value, by address)
-    /* 10 */INT_BYVAL_IDENT,
-    /* 11 */CHAR_BYVAL_IDENT,
-    /* 12 */INT_BYADR_IDENT,
-    /* 13 */CHAR_BYADR_IDENT
+    INT_BYVAL_IDENT,   // 0x0a
+    CHAR_BYVAL_IDENT,  // 0x0b
+    INT_BYADR_IDENT,   // 0x0c
+    CHAR_BYADR_IDENT   // 0x0d
 } idekind_t;
 
 struct _ident_node {

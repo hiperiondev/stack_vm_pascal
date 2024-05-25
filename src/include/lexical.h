@@ -21,59 +21,62 @@
 // Define all token enumeration
 typedef enum _token_enum {
     // Book-keeping Token
-    /*  0 */ENDFILE = 0,
-    /*  1 */ERROR = 1,
+    ENDFILE, // 0x00
+    ERROR, // 0x01
+
     // Reserved Key Word
-    /*  2 */KW_ARRAY = 2,
-    /*  3 */KW_BEGIN = 3,
-    /*  4 */KW_CHAR = 4,
-    /*  5 */KW_CONST = 5,
-    /*  6 */KW_DO = 6,
-    /*  7 */KW_DOWNTO = 7,
-    /*  8 */KW_ELSE = 8,
-    /*  9 */KW_END = 9,
-    /* 10 */KW_FOR = 10,
-    /* 11 */KW_FUNCTION = 11,
-    /* 12 */KW_IF = 12,
-    /* 13 */KW_INTEGER = 13,
-    /* 14 */KW_OF = 14,
-    /* 15 */KW_PROCEDURE = 15,
-    /* 16 */KW_READ = 16,
-    /* 17 */KW_REPEAT = 17,
-    /* 18 */KW_THEN = 18,
-    /* 19 */KW_TO = 19,
-    /* 20 */KW_UNTIL = 20,
-    /* 21 */KW_VAR = 21,
-    /* 22 */KW_WRITE = 22,
+    KW_ARRAY,     // 0x02
+    KW_BEGIN,     // 0x03
+    KW_CHAR,      // 0x04
+    KW_CONST,     // 0x05
+    KW_DO,        // 0x06
+    KW_DOWNTO,    // 0x07
+    KW_ELSE,      // 0x08
+    KW_END,       // 0x09
+    KW_FOR,       // 0x0a
+    KW_FUNCTION,  // 0x0b
+    KW_IF,        // 0x0c
+    KW_INTEGER,   // 0x0d
+    KW_OF,        // 0x0e
+    KW_PROCEDURE, // 0x0f
+    KW_READ,      // 0x10
+    KW_REPEAT,    // 0x11
+    KW_THEN,      // 0x12
+    KW_TO,        // 0x13
+    KW_UNTIL,     // 0x14
+    KW_VAR,       // 0x15
+    KW_WRITE,     // 0x16
+
     // Multi-Character Token
-    /* 23 */MC_ID = 23,
-    /* 24 */MC_CH = 24,
-    /* 25 */MC_UNS = 25,
-    /* 26 */MC_STR = 26,
+    MC_ID,        // 0x17
+    MC_CH,        // 0x18
+    MC_UNS,       // 0x19
+    MC_STR,       // 0x1a
+
     // Special Symbol as Token
-    /* 27 */SS_PLUS = 27,
-    /* 28 */SS_MINUS = 28,
-    /* 29 */SS_STAR = 29,
-    /* 30 */SS_OVER = 30,
-    /* 31 */SS_EQU = 31,
-    /* 32 */SS_LST = 32,
-    /* 33 */SS_LEQ = 33,
-    /* 34 */SS_GTT = 34,
-    /* 35 */SS_GEQ = 35,
-    /* 36 */SS_NEQ = 36,
-    /* 37 */SS_COMMA = 37,
-    /* 38 */SS_SEMI = 38,
-    /* 39 */SS_ASGN = 39,
-    /* 40 */SS_LPAR = 40,
-    /* 41 */SS_RPAR = 41,
-    /* 42 */SS_LBRA = 42,
-    /* 43 */SS_RBRA = 43,
-    /* 44 */SS_LBBR = 44,
-    /* 45 */SS_RBBR = 45,
-    /* 46 */SS_SQUO = 46,
-    /* 47 */SS_DQUO = 47,
-    /* 48 */SS_COLON = 48,
-    /* 49 */SS_DOT = 49
+    SS_PLUS,     // 0x1b
+    SS_MINUS,    // 0x1c
+    SS_STAR,     // 0x1d
+    SS_OVER,     // 0x1e
+    SS_EQU,      // 0x1f
+    SS_LST,      // 0x20
+    SS_LEQ,      // 0x21
+    SS_GTT,      // 0x22
+    SS_GEQ,      // 0x23
+    SS_NEQ,      // 0x24
+    SS_COMMA,    // 0x25
+    SS_SEMI,     // 0x26
+    SS_ASGN,     // 0x27
+    SS_LPAR,     // 0x28
+    SS_RPAR,     // 0x29
+    SS_LBRA,     // 0x2a
+    SS_RBRA,     // 0x2b
+    SS_LBBR,     // 0x2c
+    SS_RBBR,     // 0x2d
+    SS_SQUO,     // 0x2e
+    SS_DQUO,     // 0x2f
+    SS_COLON,    // 0x30
+    SS_DOT,      // 0x31
 } token_t;
 
 #endif /* _LEXICAL_H_ */
