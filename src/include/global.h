@@ -1,5 +1,5 @@
 /*
- * @
+ * @ global.h
  *
  * @brief Pascal for Stack VM
  * @details

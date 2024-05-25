@@ -1,5 +1,5 @@
 /*
- * @
+ * @ syntax.h
  *
  * @brief Pascal for Stack VM
  * @details

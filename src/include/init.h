@@ -1,5 +1,5 @@
 /*
- * @
+ * @ init.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,9 +15,9 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef INCLUDE_INIT_H_
-#define INCLUDE_INIT_H_
+#ifndef INIT_H_
+#define INIT_H_
 
 void init(int argc, char *argv[]);
 
-#endif /* INCLUDE_INIT_H_ */
+#endif /* INIT_H_ */
