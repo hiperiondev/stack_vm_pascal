@@ -1,8 +1,10 @@
 var ans, u, v, w : integer;
 
 function sub3(x, y, z : integer ) : integer;
+var p: integer;
 begin
-   sub3 := x - y - z;
+   p := x + y;
+   sub3 := x - y - z + p;
 end;
 
 { procedure newline(); begin writeln('') end; }

@@ -90,7 +90,7 @@ void pl0c_read_args(int argc, char *argv[]) {
 }
 
 void pl0c_startup_message() {
-    msg("compiler %s start, version %s\n", PL0E_NAME, PL0E_VERSION);
+    msg("; compiler %s start, version %s\n", PL0E_NAME, PL0E_VERSION);
 }
 
 void pl0c_init_file() {
@@ -112,7 +112,7 @@ void pl0c_init_file() {
     if (!source) {
         panic("SOURCE_FILE_NOT_FOUND");
     }
-    msg("reading file %s\n", PL0E_INPUT);
+    msg("; reading file %s\n\n", PL0E_INPUT);
 }
 
 // init
