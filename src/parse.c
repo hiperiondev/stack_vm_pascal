@@ -260,6 +260,12 @@ static var_def_node_t* parse_var_def(void) {
                 p->idp->kind = INT_VAR_IDENT;
             }
             break;
+        case KW_UINTEGER:
+            match(KW_UINTEGER);
+            for (p = t; p; p = p->next) {
+                p->idp->kind = UINT_VAR_IDENT;
+            }
+            break;
         case KW_CHAR:
             match(KW_CHAR);
             for (p = t; p; p = p->next) {
@@ -281,6 +287,12 @@ static var_def_node_t* parse_var_def(void) {
                 match(KW_INTEGER);
                 for (p = t; p; p = p->next) {
                     p->idp->kind = INT_ARRVAR_IDENT;
+                    p->idp->length = arrlen;
+                }
+            } else if (TOKANY(KW_UINTEGER)) {
+                match(KW_UINTEGER);
+                for (p = t; p; p = p->next) {
+                    p->idp->kind = UINT_ARRVAR_IDENT;
                     p->idp->length = arrlen;
                 }
             } else if (TOKANY(KW_CHAR)) {
@@ -442,6 +454,10 @@ static fun_head_node_t* parse_fun_head(void) {
         case KW_INTEGER:
             match(KW_INTEGER);
             t->idp->kind = INT_FUN_IDENT;
+            break;
+        case KW_UINTEGER:
+            match(KW_UINTEGER);
+            t->idp->kind = UINT_FUN_IDENT;
             break;
         case KW_CHAR:
             match(KW_CHAR);
@@ -1003,6 +1019,12 @@ static para_def_node_t* parse_para_def(void) {
             match(KW_INTEGER);
             for (p = t; p; p = p->next) {
                 p->idp->kind = byref ? INT_BYADR_IDENT : INT_BYVAL_IDENT;
+            }
+            break;
+        case KW_UINTEGER:
+            match(KW_UINTEGER);
+            for (p = t; p; p = p->next) {
+                p->idp->kind = byref ? UINT_BYADR_IDENT : UINT_BYVAL_IDENT;
             }
             break;
         case KW_CHAR:

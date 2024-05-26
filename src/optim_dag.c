@@ -43,9 +43,11 @@ static bool check_dagable(bb_t *bb) {
             case POP_OP:
             case CALL_OP:
             case RDI_OP:
+            case RDU_OP:
             case RDC_OP:
             case WRS_OP:
             case WRI_OP:
+            case WRU_OP:
             case WRC_OP:
                 return FALSE;
             default:
@@ -156,9 +158,11 @@ static void construct_graph(bb_t *bb) {
             case ENT_OP:
             case FIN_OP:
             case RDI_OP:
+            case RDU_OP:
             case RDC_OP:
             case WRS_OP:
             case WRI_OP:
+            case WRU_OP:
             case WRC_OP:
                 panic("UNSUPPORT_INSTRUCTION");
                 break;

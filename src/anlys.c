@@ -57,11 +57,12 @@ static type_t infer_expr_type(expr_node_t *node);
 static type_t infer_term_type(term_node_t *node);
 static type_t infer_factor_type(factor_node_t *node);
 
-char *typerepr[4] = {
+char *typerepr[5] = {
         [0] = "$V", // VOID_TYPE
         [1] = "$I", // INT_TYPE
-        [2] = "$C", // CHAR_TYPE
-        [3] = "$S", // STR_TYPE
+        [2] = "$U", // UINT_TYPE
+        [3] = "$C", // CHAR_TYPE
+        [4] = "$S", // STR_TYPE
 };
 
 static type_t infer_expr_type(expr_node_t *node) {
@@ -74,6 +75,8 @@ static type_t infer_expr_type(expr_node_t *node) {
             ltyp = CHAR_TYPE;
         } else if (ltyp == INT_TYPE && rtyp == INT_TYPE) {
             ltyp = INT_TYPE;
+        } else if (ltyp == UINT_TYPE && rtyp == UINT_TYPE) {
+            ltyp = UINT_TYPE;
         }
     }
     return ltyp;
@@ -89,6 +92,8 @@ static type_t infer_term_type(term_node_t *node) {
             ltyp = CHAR_TYPE;
         } else if (ltyp == INT_TYPE && rtyp == INT_TYPE) {
             ltyp = INT_TYPE;
+        } else if (ltyp == UINT_TYPE && rtyp == UINT_TYPE) {
+            ltyp = UINT_TYPE;
         }
     }
     return ltyp;

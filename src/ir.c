@@ -44,14 +44,16 @@ char *opcode[32] = {
         [18] = "PUSH_ADDR",
         [19] = "POP",
         [20] = "CALL",
-        [21] = "ENTRY",
-        [22] = "FINALIZE",
+        [21] = "FN_START",
+        [22] = "FN_END",
         [23] = "READ_INT",
-        [24] = "READ_CHAR",
-        [25] = "WRITE_STRING",
-        [26] = "WRITE_INT",
-        [27] = "WRITE_CHAR",
-        [28] = "LABEL",
+        [24] = "READ_UINT",
+        [25] = "READ_CHAR",
+        [26] = "WRITE_STRING",
+        [27] = "WRITE_INT",
+        [28] = "WRITE_UINT",
+        [29] = "WRITE_CHAR",
+        [30] = "LABEL",
 };
 
 // instructions

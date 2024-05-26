@@ -55,12 +55,14 @@ typedef enum _inst_op_enum {
     FIN_OP,  // 0x16 entry
     // I/O Management
     RDI_OP,  // 0x17 d
-    RDC_OP,  // 0x18 d
-    WRS_OP,  // 0x19 d
-    WRI_OP,  // 0x1a d
-    WRC_OP,  // 0x1b d
+    RDU_OP,  // 0x18 d
+    RDC_OP,  // 0x19 d
+    WRS_OP,  // 0x1a d
+    WRI_OP,  // 0x1b d
+    WRU_OP,  // 0x1c d
+    WRC_OP,  // 0x1d d
     // Label Marker
-    LAB_OP   // 0x1c ifthen / ifdone / loopstart / loopdone / forstart / fordone
+    LAB_OP   // 0x1e ifthen / ifdone / loopstart / loopdone / forstart / fordone
 } op_t;
 
 // Instruction struct

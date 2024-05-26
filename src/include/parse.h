@@ -72,8 +72,8 @@ extern int nidcnt;
 
 // ID read mode, for parse_ident()
 typedef enum _idreadmode_enum {
-    READCURR,
-    READPREV
+    READCURR, //
+    READPREV  //
 } idreadmode_t;
 
 // syntax analysis, produce the syntax tree

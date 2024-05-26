@@ -241,6 +241,9 @@ static void gen_read_stmt(read_stmt_node_t *node) {
             case INT_TYPE:
                 emit1(RDI_OP, d);
                 break;
+            case UINT_TYPE:
+                emit1(RDU_OP, d);
+                break;
             default:
         }
     }
@@ -263,6 +266,9 @@ static void gen_write_stmt(write_stmt_node_t *node) {
                 case INT_TYPE:
                     emit1(WRI_OP, d);
                     break;
+                case UINT_TYPE:
+                    emit1(WRU_OP, d);
+                    break;
                 default:
                     unlikely();
             }
@@ -278,6 +284,9 @@ static void gen_write_stmt(write_stmt_node_t *node) {
                     break;
                 case INT_TYPE:
                     emit1(WRI_OP, d);
+                    break;
+                case UINT_TYPE:
+                    emit1(WRU_OP, d);
                     break;
                 default:
                     unlikely();

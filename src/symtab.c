@@ -208,26 +208,32 @@ syment_t* syminit2(symtab_t *stab, ident_node_t *idp, char *key) {
             e->cate = PROC_OBJ;
             break;
         case INT_FUN_IDENT:
+        case UINT_FUN_IDENT:
         case CHAR_FUN_IDENT:
             e->cate = FUN_OBJ;
             break;
         case INT_CONST_IDENT:
+        case UINT_CONST_IDENT:
         case CHAR_CONST_IDENT:
             e->cate = CONST_OBJ;
             break;
         case INT_VAR_IDENT:
+        case UINT_VAR_IDENT:
         case CHAR_VAR_IDENT:
             e->cate = VAR_OBJ;
             break;
         case INT_ARRVAR_IDENT:
+        case UINT_ARRVAR_IDENT:
         case CHAR_ARRVAR_IDENT:
             e->cate = ARRAY_OBJ;
             break;
         case INT_BYVAL_IDENT:
+        case UINT_BYVAL_IDENT:
         case CHAR_BYVAL_IDENT:
             e->cate = BYVAL_OBJ;
             break;
         case INT_BYADR_IDENT:
+        case UINT_BYADR_IDENT:
         case CHAR_BYADR_IDENT:
             e->cate = BYREF_OBJ;
             break;
@@ -243,6 +249,14 @@ syment_t* syminit2(symtab_t *stab, ident_node_t *idp, char *key) {
         case INT_BYVAL_IDENT:
         case INT_BYADR_IDENT:
             e->type = INT_TYPE;
+            break;
+        case UINT_FUN_IDENT:
+        case UINT_CONST_IDENT:
+        case UINT_VAR_IDENT:
+        case UINT_ARRVAR_IDENT:
+        case UINT_BYVAL_IDENT:
+        case UINT_BYADR_IDENT:
+            e->type = UINT_TYPE;
             break;
         case CHAR_FUN_IDENT:
         case CHAR_CONST_IDENT:

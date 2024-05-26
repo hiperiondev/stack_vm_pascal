@@ -44,6 +44,7 @@ static const char *category[] = {
 static const char *value_type[] = {
         EP(VOID_TYPE), //
         EP(INT_TYPE),  //
+        EP(UINT_TYPE), //
         EP(CHAR_TYPE), //
         EP(STR_TYPE)   //
 };

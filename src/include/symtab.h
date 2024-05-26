@@ -52,8 +52,9 @@ typedef enum _sym_cate_enum {
 typedef enum _sym_type_enum {
     VOID_TYPE, // 0x00
     INT_TYPE,  // 0x01
-    CHAR_TYPE, // 0x02
-    STR_TYPE   // 0x03
+    UINT_TYPE, // 0x02
+    CHAR_TYPE, // 0x03
+    STR_TYPE   // 0x04
 } type_t;
 
 // signature for procedure and function

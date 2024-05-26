@@ -304,6 +304,7 @@ static struct _pl0e_keywords_struct {
         { "function",  KW_FUNCTION  }, //
         { "if",        KW_IF        }, //
         { "integer",   KW_INTEGER   }, //
+        { "uinteger",  KW_UINTEGER  }, //
         { "of",        KW_OF        }, //
         { "procedure", KW_PROCEDURE }, //
         { "read",      KW_READ      }, //

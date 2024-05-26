@@ -119,6 +119,7 @@ static void calc_use_def(bb_t *bb) {
             case PADR_OP:
             case POP_OP:
             case RDI_OP:
+            case RDU_OP:
             case RDC_OP:
                 setuse(bb, x->d);
                 if (x->r) {
@@ -127,6 +128,7 @@ static void calc_use_def(bb_t *bb) {
                 break;
             case WRS_OP:
             case WRI_OP:
+            case WRU_OP:
             case WRC_OP:
                 setdef(bb, x->d);
                 break;

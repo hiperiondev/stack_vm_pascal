@@ -293,23 +293,29 @@ typedef enum _ident_enum {
     INIT_IDENT,        // 0x00
     PROC_IDENT,        // 0x01
     INT_FUN_IDENT,     // 0x02
-    CHAR_FUN_IDENT,    // 0x03
+    UINT_FUN_IDENT,    // 0x03
+    CHAR_FUN_IDENT,    // 0x04
 
     // Const Identifier
-    INT_CONST_IDENT,   // 0x04
-    CHAR_CONST_IDENT,  // 0x05
+    INT_CONST_IDENT,   // 0x05
+    UINT_CONST_IDENT,  // 0x06
+    CHAR_CONST_IDENT,  // 0x07
 
     // Variable Identifier
-    INT_VAR_IDENT,     // 0x06
-    CHAR_VAR_IDENT,    // 0x07
-    INT_ARRVAR_IDENT,  // 0x08
-    CHAR_ARRVAR_IDENT, // 0x09
+    INT_VAR_IDENT,     // 0x08
+    UINT_VAR_IDENT,    // 0x09
+    CHAR_VAR_IDENT,    // 0x0a
+    INT_ARRVAR_IDENT,  // 0x0b
+    UINT_ARRVAR_IDENT, // 0x0c
+    CHAR_ARRVAR_IDENT, // 0x0d
 
     // Parameter Identifier, (by value, by address)
-    INT_BYVAL_IDENT,   // 0x0a
-    CHAR_BYVAL_IDENT,  // 0x0b
-    INT_BYADR_IDENT,   // 0x0c
-    CHAR_BYADR_IDENT   // 0x0d
+    INT_BYVAL_IDENT,   // 0x0e
+    UINT_BYVAL_IDENT,  // 0x0f
+    CHAR_BYVAL_IDENT,  // 0x10
+    INT_BYADR_IDENT,   // 0x11
+    UINT_BYADR_IDENT,  // 0x12
+    CHAR_BYADR_IDENT   // 0x13
 } idekind_t;
 
 struct _ident_node {
