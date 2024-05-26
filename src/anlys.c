@@ -544,11 +544,11 @@ static void anlys_factor(factor_node_t *node) {
                 giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
             }
             switch (e->cate) {
-                case CONST_OBJ:
-                case VAR_OBJ:
-                case TMP_OBJ:
-                case BYVAL_OBJ:
-                case BYREF_OBJ:
+                case CONSTANT_OBJ:
+                case VARIABLE_OBJ:
+                case TEMP_OBJ:
+                case BY_VALUE_OBJ:
+                case BY_REFERENCE_OBJ:
                     break;
                 default:
                     giveup(BADCTG, "L%d: symbol %s category is bad.", idp->line, idp->name);
@@ -598,9 +598,9 @@ static void anlys_fcall_stmt(fcall_stmt_node_t *node) {
 
     syment_t *e = symfind(fname);
     if (!e) {
-        giveup(BADSYM, "L%d: function %s not found.", idp->line, idp->name);
+        giveup(BADSYM, "line %d: function %s not found.", idp->line, idp->name);
     }
-    if (e->cate != FUN_OBJ) {
+    if (e->cate != FUNCTION_OBJ) {
         giveup(ERTYPE, "L%d: symbol %s type is not function.", idp->line, idp->name);
     }
     idp->symbol = e;
@@ -626,12 +626,12 @@ static void anlys_arg_list(syment_t *sign, arg_list_node_t *node) {
         syment_t *e, *a;
         e = p->symbol;
         switch (e->cate) {
-            case BYVAL_OBJ:
+            case BY_VALUE_OBJ:
                 nevernil(t->ep);
                 anlys_expr(t->ep);
                 t->refsym = e;
                 break;
-            case BYREF_OBJ: // var, arr[exp]
+            case BY_REFERENCE_OBJ: // var, arr[exp]
                 if (!t->ep) {
                     goto referr;
                 }
@@ -666,7 +666,7 @@ refok:
                 if (!a) {
                     giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
                 }
-                if (fp->kind == ID_FACTOR && a->cate != VAR_OBJ) {
+                if (fp->kind == ID_FACTOR && a->cate != VARIABLE_OBJ) {
                     giveup(OBJREF, "L%d: %s() arg%d is not variable object.", idp->line, idp->name, pos);
                 }
                 if (fp->kind == ARRAY_FACTOR && a->cate != ARRAY_OBJ) {

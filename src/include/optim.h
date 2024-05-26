@@ -27,7 +27,7 @@
 #define NBITARR (MAXSETBITS / BITSIZE)
 
 // get syment_t *e representation
-#define REPR(e) (e->cate == TMP_OBJ ? e->label : e->name)
+#define REPR(e) (e->cate == TEMP_OBJ ? e->label : e->name)
 
 // bitset function
 void sset(bits_t bits[], syment_t *e);

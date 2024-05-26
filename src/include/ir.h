@@ -34,7 +34,7 @@ typedef enum _inst_op_enum {
     NEG_OP,          // 0x06 d, r
 
     // Load and Store
-    LOAD_OP,         // 0x07 d, r, e
+    LOAD_ARRAY_OP,   // 0x07 d, r, e
     STORE_VAR_OP,    // 0x08 d, r / d, beg
     STORE_ARRAY_OP,  // 0x09 d, r, s
 

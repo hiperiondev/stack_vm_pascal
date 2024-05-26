@@ -135,7 +135,7 @@ static void construct_graph(bb_t *bb) {
             case SUB_OP:
             case MUL_OP:
             case DIV_OP:
-            case LOAD_OP:
+            case LOAD_ARRAY_OP:
                 lhs = find_leaf(graph, x->r);
                 rhs = find_leaf(graph, x->s);
                 out = find_nonleaf(graph, x->op, lhs, rhs);

@@ -12,7 +12,7 @@ end;
 procedure newline(); var nl: char; begin nl := 10; write(nl) end;
 
 begin
-   u := 9; v := 2; w := 3;
+   u := 9; v := 2; w := -3;
 
    ans := sub3(u, v, w);
    write(ans); newline();

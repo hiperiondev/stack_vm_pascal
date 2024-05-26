@@ -142,7 +142,7 @@ static void dumptab(symtab_t *stab) {
         syment_t *hair, *e;
         hair = &t->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            msg("%ssid=%d, name=%s, cate=%d, type=%d, value=%d, label=%s\n", indent, e->sid, e->name, e->cate, e->type, e->initval, e->label);
+            msg("%ssid=%d, name=%s, cate=%d, type=%d, value=%ld, label=%s\n", indent, e->sid, e->name, e->cate, e->type, e->initval, e->label);
         }
     }
     msg("%sargoff: %d, varoff: %d, tmpoff: %d\n", indent, stab->argoff, stab->varoff, stab->tmpoff);
@@ -210,17 +210,17 @@ syment_t* syminit2(symtab_t *stab, ident_node_t *idp, char *key) {
         case INT_FUN_IDENT:
         case UINT_FUN_IDENT:
         case CHAR_FUN_IDENT:
-            e->cate = FUN_OBJ;
+            e->cate = FUNCTION_OBJ;
             break;
         case INT_CONST_IDENT:
         case UINT_CONST_IDENT:
         case CHAR_CONST_IDENT:
-            e->cate = CONST_OBJ;
+            e->cate = CONSTANT_OBJ;
             break;
         case INT_VAR_IDENT:
         case UINT_VAR_IDENT:
         case CHAR_VAR_IDENT:
-            e->cate = VAR_OBJ;
+            e->cate = VARIABLE_OBJ;
             break;
         case INT_ARRVAR_IDENT:
         case UINT_ARRVAR_IDENT:
@@ -230,12 +230,12 @@ syment_t* syminit2(symtab_t *stab, ident_node_t *idp, char *key) {
         case INT_BYVAL_IDENT:
         case UINT_BYVAL_IDENT:
         case CHAR_BYVAL_IDENT:
-            e->cate = BYVAL_OBJ;
+            e->cate = BY_VALUE_OBJ;
             break;
         case INT_BYADR_IDENT:
         case UINT_BYADR_IDENT:
         case CHAR_BYADR_IDENT:
-            e->cate = BYREF_OBJ;
+            e->cate = BY_REFERENCE_OBJ;
             break;
         default:
             e->cate = NOP_OBJ;
@@ -273,17 +273,17 @@ syment_t* syminit2(symtab_t *stab, ident_node_t *idp, char *key) {
     sprintf(e->label, "L%03d", e->sid);
     switch (e->cate) {
         case NOP_OBJ:
-        case CONST_OBJ:
+        case CONSTANT_OBJ:
             // no need allocation
             break;
-        case VAR_OBJ:
+        case VARIABLE_OBJ:
         case PROC_OBJ:
-        case FUN_OBJ:
+        case FUNCTION_OBJ:
             e->off = stab->varoff;
             stab->varoff++;
             break;
-        case BYVAL_OBJ:
-        case BYREF_OBJ:
+        case BY_VALUE_OBJ:
+        case BY_REFERENCE_OBJ:
             e->off = stab->argoff;
             stab->argoff++;
             break;
@@ -310,15 +310,15 @@ syment_t* symalloc(symtab_t *stab, char *name, cate_t cate, type_t type) {
 
     sprintf(e->label, "T%03d", e->sid);
     switch (e->cate) {
-        case TMP_OBJ:
+        case TEMP_OBJ:
             // from now on, we will NEVER alloc local variables so just
             // alloc temporary variables
             e->off = stab->varoff + stab->tmpoff;
             stab->tmpoff++;
             break;
         case LABEL_OBJ:
-        case NUM_OBJ:
-        case STR_OBJ:
+        case NUMBER_OBJ:
+        case STRING_OBJ:
             // label/number/string never use bytes
             break;
         default:

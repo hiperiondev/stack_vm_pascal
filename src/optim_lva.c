@@ -24,10 +24,10 @@
 // test if symbol e is a variable
 bool isvar(syment_t *e) {
     switch (e->cate) {
-        case VAR_OBJ:
-        case TMP_OBJ:
-        case BYVAL_OBJ:
-        case BYREF_OBJ:
+        case VARIABLE_OBJ:
+        case TEMP_OBJ:
+        case BY_VALUE_OBJ:
+        case BY_REFERENCE_OBJ:
             return TRUE;
         default:
             return FALSE;
@@ -85,7 +85,7 @@ static void calc_use_def(bb_t *bb) {
             case SUB_OP:
             case MUL_OP:
             case DIV_OP:
-            case LOAD_OP:
+            case LOAD_ARRAY_OP:
             case STORE_ARRAY_OP:
                 setuse(bb, x->r);
                 setuse(bb, x->s);
@@ -282,7 +282,7 @@ static void elim_dead_assign(bb_t *bb) {
         if (curr->op != STORE_VAR_OP) {
             goto dupinst;
         }
-        if (d->cate != VAR_OBJ && d->cate != TMP_OBJ) {
+        if (d->cate != VARIABLE_OBJ && d->cate != TEMP_OBJ) {
             goto dupinst;
         }
         if (!sget(bb->in, d) && !sget(bb->out, d)) {

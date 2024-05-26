@@ -181,13 +181,15 @@ static const_def_node_t* parse_const_def(void) {
         switch (currtok) {
             case SS_PLUS:
                 match(SS_PLUS);
-                t->idp->kind = INT_CONST_IDENT;
-                t->idp->value = atoi(tokbuf);
+                t->idp->kind = UINT_CONST_IDENT;
+                t->idp->sign = false;
+                t->idp->uvalue = atol(tokbuf);
                 match(MC_UNS);
                 break;
             case SS_MINUS:
                 match(SS_MINUS);
                 t->idp->kind = INT_CONST_IDENT;
+                t->idp->sign = true;
                 t->idp->value = -atoi(tokbuf);
                 match(MC_UNS);
                 break;
@@ -862,13 +864,8 @@ static factor_node_t* parse_factor(void) {
     switch (currtok) {
         case MC_UNS:
             t->kind = UNSIGN_FACTOR;
-            if (tokbuf[0] == '-') {
-                t->sign = true;
-                t->value = atoi(tokbuf);
-            } else {
-                t->sign = false;
-                t->uvalue = atoi(tokbuf);
-            }
+            t->sign = false;
+            t->uvalue = atol(tokbuf);
             match(MC_UNS);
             break;
         case MC_CH:

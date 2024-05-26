@@ -253,7 +253,7 @@ static void gen_write_stmt(write_stmt_node_t *node) {
     syment_t *d = NULL;
     switch (node->type) {
         case STR_WRITE:
-            d = symalloc(node->stab, "@write/str", STR_OBJ, STRING_TYPE);
+            d = symalloc(node->stab, "@write/str", STRING_OBJ, STRING_TYPE);
             strcopy(d->str, node->sp);
             emit1(WRITE_STRING_OP, d);
             break;
@@ -274,7 +274,7 @@ static void gen_write_stmt(write_stmt_node_t *node) {
             }
             break;
         case STRID_WRITE:
-            d = symalloc(node->stab, "@write/str", STR_OBJ, STRING_TYPE);
+            d = symalloc(node->stab, "@write/str", STRING_OBJ, STRING_TYPE);
             strcopy(d->str, node->sp);
             emit1(WRITE_STRING_OP, d);
             d = gen_expr(node->ep);
@@ -306,7 +306,7 @@ static syment_t* gen_expr(expr_node_t *node) {
         if (!d) {
             switch (t->kind) {
                 case NEG_ADDOP:
-                    d = symalloc(node->stab, "@expr/neg", TMP_OBJ, r->type);
+                    d = symalloc(node->stab, "@expr/neg", TEMP_OBJ, r->type);
                     emit2(NEG_OP, d, r);
                     break;
                 case NOP_ADDOP:
@@ -321,13 +321,13 @@ static syment_t* gen_expr(expr_node_t *node) {
             case NOP_ADDOP:
             case ADD_ADDOP:
                 e = d;
-                d = symalloc(node->stab, "@expr/add", TMP_OBJ, e->type);
+                d = symalloc(node->stab, "@expr/add", TEMP_OBJ, e->type);
                 emit3(ADD_OP, d, e, r);
                 break;
             case MINUS_ADDOP:
             case NEG_ADDOP:
                 e = d;
-                d = symalloc(node->stab, "@expr/sub", TMP_OBJ, e->type);
+                d = symalloc(node->stab, "@expr/sub", TEMP_OBJ, e->type);
                 emit3(SUB_OP, d, e, r);
                 break;
             default:
@@ -354,12 +354,12 @@ static syment_t* gen_term(term_node_t *node) {
             case NOP_MULTOP:
             case MULT_MULTOP:
                 e = d;
-                d = symalloc(node->stab, "@term/mul", TMP_OBJ, e->type);
+                d = symalloc(node->stab, "@term/mul", TEMP_OBJ, e->type);
                 emit3(MUL_OP, d, e, r);
                 break;
             case DIV_MULTOP:
                 e = d;
-                d = symalloc(node->stab, "@term/div", TMP_OBJ, e->type);
+                d = symalloc(node->stab, "@term/div", TEMP_OBJ, e->type);
                 emit3(DIV_OP, d, e, r);
                 break;
             default:
@@ -379,20 +379,20 @@ static syment_t* gen_factor(factor_node_t *node) {
         case ARRAY_FACTOR:
             r = node->idp->symbol;
             e = gen_expr(node->ep);
-            d = symalloc(node->stab, "@factor/array", TMP_OBJ, r->type);
-            emit3(LOAD_OP, d, r, e);
+            d = symalloc(node->stab, "@factor/array", TEMP_OBJ, r->type);
+            emit3(LOAD_ARRAY_OP, d, r, e);
             break;
         case UNSIGN_FACTOR:
             if (node->sign) {
-                d = symalloc(node->stab, "@factor/usi", NUM_OBJ, INT_TYPE);
+                d = symalloc(node->stab, "@factor/usi", NUMBER_OBJ, INT_TYPE);
                 d->initval = node->value;
             } else {
-                d = symalloc(node->stab, "@factor/usi", NUM_OBJ, UINT_TYPE);
+                d = symalloc(node->stab, "@factor/usi", NUMBER_OBJ, UINT_TYPE);
                 d->initval = node->uvalue;
             }
             break;
         case CHAR_FACTOR:
-            d = symalloc(node->stab, "@factor/char", NUM_OBJ, CHAR_TYPE);
+            d = symalloc(node->stab, "@factor/char", NUMBER_OBJ, CHAR_TYPE);
             d->initval = node->value;
             break;
         case EXPR_FACTOR:
@@ -410,7 +410,7 @@ static syment_t* gen_factor(factor_node_t *node) {
 static syment_t* gen_fcall_stmt(fcall_stmt_node_t *node) {
     syment_t *d, *e;
     e = node->idp->symbol;
-    d = symalloc(node->stab, "@fcall/ret", TMP_OBJ, e->type);
+    d = symalloc(node->stab, "@fcall/ret", TEMP_OBJ, e->type);
     gen_arg_list(node->alp);
     emit2(CALL_OP, d, e);
     arg_list_node_t *t;
@@ -457,14 +457,14 @@ static void gen_arg_list(arg_list_node_t *node) {
 
     syment_t *d = NULL, *r = NULL;
     switch (t->refsym->cate) {
-        case BYVAL_OBJ:
+        case BY_VALUE_OBJ:
             d = gen_expr(t->ep);
             emit1(PUSH_VAL_OP, d);
             break;
-        case BYREF_OBJ:
+        case BY_REFERENCE_OBJ:
             d = t->argsym;
             switch (t->argsym->cate) {
-                case VAR_OBJ:
+                case VARIABLE_OBJ:
                     emit2(PUSH_ADDR_OP, d, NULL);
                     break;
                 case ARRAY_OBJ:

@@ -32,29 +32,29 @@ typedef struct _sym_table_struct symtab_t;
 // symbol category
 typedef enum _sym_cate_enum {
     // Primary Object
-    NOP_OBJ,   // 0x00
-    CONST_OBJ, // 0x01
-    VAR_OBJ,   // 0x02
-    PROC_OBJ,  // 0x03
-    FUN_OBJ,   // 0x04
-    ARRAY_OBJ, // 0x05
-    BYVAL_OBJ, // 0x06
-    BYREF_OBJ, // 0x07
+    NOP_OBJ,          // 0x00
+    CONSTANT_OBJ,     // 0x01
+    VARIABLE_OBJ,     // 0x02
+    PROC_OBJ,         // 0x03
+    FUNCTION_OBJ,     // 0x04
+    ARRAY_OBJ,        // 0x05
+    BY_VALUE_OBJ,     // 0x06
+    BY_REFERENCE_OBJ, // 0x07
 
     // Additional
-    TMP_OBJ,   // 0x08
-    LABEL_OBJ, // 0x09
-    NUM_OBJ,   // 0x0a
-    STR_OBJ    // 0x0b
+    TEMP_OBJ,         // 0x08
+    LABEL_OBJ,        // 0x09
+    NUMBER_OBJ,       // 0x0a
+    STRING_OBJ        // 0x0b
 } cate_t;
 
 // symbol type
 typedef enum _sym_type_enum {
-    VOID_TYPE,  // 0x00
-    INT_TYPE,   // 0x01
-    UINT_TYPE,  // 0x02
-    CHAR_TYPE,  // 0x03
-    STRING_TYPE // 0x04
+    VOID_TYPE,        // 0x00
+    INT_TYPE,         // 0x01
+    UINT_TYPE,        // 0x02
+    CHAR_TYPE,        // 0x03
+    STRING_TYPE       // 0x04
 } type_t;
 
 // signature for procedure and function
@@ -68,7 +68,7 @@ struct _sym_entry_struct {
     char name[MAXSTRLEN];  // identifier name
     cate_t cate;           //
     type_t type;           //
-    int initval;           // const value, initval value
+    long int initval;      // const value, initval value
     int arrlen;            //
     char str[MAXSTRLEN];   //
     param_t *phead;        //
