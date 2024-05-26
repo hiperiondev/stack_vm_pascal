@@ -18,6 +18,9 @@
 #ifndef _SYNTAX_H_
 #define _SYNTAX_H_
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #include "limits.h"
 #include "parse.h"
 #include "symtab.h"
@@ -265,7 +268,9 @@ struct _factor_node {
     ident_node_t *idp;
     expr_node_t *ep;
     // value: store unsigned int or char
-    int value;
+    bool sign;
+    int32_t value;
+    uint32_t uvalue;
     fcall_stmt_node_t *fcsp;
     symtab_t *stab;
 };

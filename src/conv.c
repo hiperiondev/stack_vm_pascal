@@ -430,7 +430,10 @@ tnode_t* conv_factor_node(factor_node_t *t) {
             addchild(d, conv_expr_node(t->ep), "ep");
             break;
         case UNSIGN_FACTOR:
-            sprintf(buf, "%d", t->value);
+            if (t->sign)
+                sprintf(buf, "%d", t->value);
+            else
+                sprintf(buf, "%u", t->uvalue);
             strcopy(d->extra, buf);
             break;
         case CHAR_FACTOR:

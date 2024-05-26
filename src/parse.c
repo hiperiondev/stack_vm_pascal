@@ -862,7 +862,13 @@ static factor_node_t* parse_factor(void) {
     switch (currtok) {
         case MC_UNS:
             t->kind = UNSIGN_FACTOR;
-            t->value = atoi(tokbuf);
+            if (tokbuf[0] == '-') {
+                t->sign = true;
+                t->value = atoi(tokbuf);
+            } else {
+                t->sign = false;
+                t->uvalue = atoi(tokbuf);
+            }
             match(MC_UNS);
             break;
         case MC_CH:

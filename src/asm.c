@@ -27,37 +27,37 @@
 #define EP(x) [x] = #x
 
 static const char *category[] = {
-        "NOP",   //
-        "CONST", //
-        "VAR",   //
-        "PROC",  //
-        "FUN",   //
-        "ARRAY", //
-        "BYVAL", //
-        "BYREF", //
-        "TMP",   //
-        "LABEL", //
-        "NUM",   //
-        "STR",   //
+        "NOP",          //
+        "CONST",        //
+        "VARIABLE",     //
+        "PROCEDURE",    //
+        "FUNCTION",     //
+        "ARRAY",        //
+        "BY_VALUE",     //
+        "BY_REFERENCE", //
+        "TEMP",         //
+        "LABEL",        //
+        "NUMBER",       //
+        "STRING",       //
 };
 
 static const char *value_type[] = {
-        "VOID", //
-        "INT",  //
-        "UINT", //
-        "CHAR", //
-        "STR"   //
+        "VOID",  //
+        "INT",   //
+        "UINT",  //
+        "CHAR",  //
+        "STRING" //
 };
 
 static void print_table(symtab_t *table) {
-    printf("          { symbol table(tid=%d): depth=%d, nspace=%s }\n", table->tid, table->depth, table->nspace);
+    printf("          { symbol table id: %d, depth: %d, name space: %s }\n", table->tid, table->depth, table->nspace);
 
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            printf("          { symbol id=%d, name=%s, category=%s, type=%s, value=%d, label=%s }\n", e->sid, e->name, category[e->cate], value_type[e->type],
-                    e->initval, e->label);
+            printf("          { symbol id: %d, name: %s, category: %s, type: %s, value: %d, label: %s, offset: %d }\n", e->sid, e->name, category[e->cate], value_type[e->type],
+                    e->initval, e->label, e->off);
         }
     }
     printf("          { argument offset: %d, variable offset: %d, temp offset: %d }\n", table->argoff, table->varoff, table->tmpoff);
@@ -133,188 +133,252 @@ static void print_args(inst_t *instruction) {
 
 ///////////////////// instructions /////////////////////
 
-static void asmbl_add_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_sub_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_mul_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_div_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_inc_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_dec_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_neg_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_load_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_store_var_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_store_array_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_branch_equ_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_branch_neq_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_branch_gtt_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_branch_geq_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_branch_lst_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_branch_leq_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_jump_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_push_val_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_push_addr_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_pop_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
-static void asmbl_call_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
-    print_args(instruction);
-    printf("\n");
-}
-
 static void asmbl_fn_start_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf(";%*s", (int)strlen(opcode[instruction->op]), "");
+    printf("name%*s args vars tmps\n", (int)strlen(instruction->d->name) - 4, "");
+    printf("%s ", opcode[instruction->op]);
+    printf ("%s %04d %04d %04d ",instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff);
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_fn_end_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_add_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_sub_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_mul_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_div_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_inc_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_dec_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_neg_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_load_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_store_var_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_store_array_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_branch_equ_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_branch_neq_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_branch_gtt_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_branch_geq_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_branch_lst_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_branch_leq_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_jump_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_push_val_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_push_addr_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_pop_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_call_op(inst_t *instruction) {
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_read_int_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_read_uint_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_read_char_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_write_string_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_write_int_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_write_uint_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_write_char_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }
 
 static void asmbl_label_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    printf("%s ", opcode[instruction->op]);
+
+    printf("\n");
     print_args(instruction);
     printf("\n");
 }

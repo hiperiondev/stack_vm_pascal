@@ -1,10 +1,10 @@
 var ans, u, v, w : integer;
     x: uinteger;
 
-function sub3(x, y, z : integer ) : integer;
+function sub3(x, y, z : integer ) : uinteger;
 var p: uinteger;
 begin
-   p := x + y;
+   p := x + y + 6;
    sub3 := x - y - z + p + w;
 end;
 

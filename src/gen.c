@@ -253,7 +253,7 @@ static void gen_write_stmt(write_stmt_node_t *node) {
     syment_t *d = NULL;
     switch (node->type) {
         case STR_WRITE:
-            d = symalloc(node->stab, "@write/str", STR_OBJ, STR_TYPE);
+            d = symalloc(node->stab, "@write/str", STR_OBJ, STRING_TYPE);
             strcopy(d->str, node->sp);
             emit1(WRITE_STRING_OP, d);
             break;
@@ -274,7 +274,7 @@ static void gen_write_stmt(write_stmt_node_t *node) {
             }
             break;
         case STRID_WRITE:
-            d = symalloc(node->stab, "@write/str", STR_OBJ, STR_TYPE);
+            d = symalloc(node->stab, "@write/str", STR_OBJ, STRING_TYPE);
             strcopy(d->str, node->sp);
             emit1(WRITE_STRING_OP, d);
             d = gen_expr(node->ep);
@@ -383,8 +383,13 @@ static syment_t* gen_factor(factor_node_t *node) {
             emit3(LOAD_OP, d, r, e);
             break;
         case UNSIGN_FACTOR:
-            d = symalloc(node->stab, "@factor/usi", NUM_OBJ, INT_TYPE);
-            d->initval = node->value;
+            if (node->sign) {
+                d = symalloc(node->stab, "@factor/usi", NUM_OBJ, INT_TYPE);
+                d->initval = node->value;
+            } else {
+                d = symalloc(node->stab, "@factor/usi", NUM_OBJ, UINT_TYPE);
+                d->initval = node->uvalue;
+            }
             break;
         case CHAR_FACTOR:
             d = symalloc(node->stab, "@factor/char", NUM_OBJ, CHAR_TYPE);

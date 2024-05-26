@@ -58,11 +58,11 @@ static type_t infer_term_type(term_node_t *node);
 static type_t infer_factor_type(factor_node_t *node);
 
 char *typerepr[5] = {
-        [0] = "$V", // VOID_TYPE
-        [1] = "$I", // INT_TYPE
-        [2] = "$U", // UINT_TYPE
-        [3] = "$C", // CHAR_TYPE
-        [4] = "$S", // STR_TYPE
+        [0] = "_V", // VOID_TYPE
+        [1] = "_I", // INT_TYPE
+        [2] = "_U", // UINT_TYPE
+        [3] = "_C", // CHAR_TYPE
+        [4] = "_S", // STR_TYPE
 };
 
 static type_t infer_expr_type(expr_node_t *node) {
@@ -123,7 +123,10 @@ static type_t infer_factor_type(factor_node_t *node) {
             }
             return e->type;
         case UNSIGN_FACTOR:
-            return INT_TYPE;
+            if (node->sign)
+                return INT_TYPE;
+            else
+                return UINT_TYPE;
         case CHAR_FACTOR:
             return CHAR_TYPE;
         case EXPR_FACTOR:
