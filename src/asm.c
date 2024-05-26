@@ -27,26 +27,26 @@
 #define EP(x) [x] = #x
 
 static const char *category[] = {
-        EP(NOP_OBJ),   //
-        EP(CONST_OBJ), //
-        EP(VAR_OBJ),   //
-        EP(PROC_OBJ),  //
-        EP(FUN_OBJ),   //
-        EP(ARRAY_OBJ), //
-        EP(BYVAL_OBJ), //
-        EP(BYREF_OBJ), //
-        EP(TMP_OBJ),   //
-        EP(LABEL_OBJ), //
-        EP(NUM_OBJ),   //
-        EP(STR_OBJ),   //
+        "NOP",   //
+        "CONST", //
+        "VAR",   //
+        "PROC",  //
+        "FUN",   //
+        "ARRAY", //
+        "BYVAL", //
+        "BYREF", //
+        "TMP",   //
+        "LABEL", //
+        "NUM",   //
+        "STR",   //
 };
 
 static const char *value_type[] = {
-        EP(VOID_TYPE), //
-        EP(INT_TYPE),  //
-        EP(UINT_TYPE), //
-        EP(CHAR_TYPE), //
-        EP(STR_TYPE)   //
+        "VOID", //
+        "INT",  //
+        "UINT", //
+        "CHAR", //
+        "STR"   //
 };
 
 static void print_table(symtab_t *table) {
@@ -128,6 +128,8 @@ static void print_args(inst_t *instruction) {
     } else
         printf("  [arg s]\n    NONE\n  [end arg s]\n");
 }
+
+///////////////////// instructions /////////////////////
 
 static void asmbl_add_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
@@ -302,6 +304,8 @@ static void asmbl_lab_op(inst_t *instruction) {
     print_args(instruction);
     printf("\n");
 }
+
+////////////////////////////////////////////////////////
 
 void genasm(void) {
     inst_t *instruction;

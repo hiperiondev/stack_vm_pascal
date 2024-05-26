@@ -1,4 +1,5 @@
 var ans, u, v, w : integer;
+    x: uinteger;
 
 function sub3(x, y, z : integer ) : integer;
 var p: uinteger;
