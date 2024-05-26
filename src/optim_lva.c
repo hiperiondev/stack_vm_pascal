@@ -86,7 +86,7 @@ static void calc_use_def(bb_t *bb) {
             case MUL_OP:
             case DIV_OP:
             case LOAD_OP:
-            case ASA_OP:
+            case STORE_ARRAY_OP:
                 setuse(bb, x->r);
                 setuse(bb, x->s);
                 setdef(bb, x->d);
@@ -96,40 +96,40 @@ static void calc_use_def(bb_t *bb) {
                 setuse(bb, x->d);
                 break;
             case NEG_OP:
-            case ASS_OP:
+            case STORE_VAR_OP:
                 setuse(bb, x->r);
                 setdef(bb, x->d);
                 break;
-            case EQU_OP:
-            case NEQ_OP:
-            case GTT_OP:
-            case GEQ_OP:
-            case LST_OP:
-            case LEQ_OP:
+            case BRANCH_EQU_OP:
+            case BRANCH_NEQ_OP:
+            case BRANCH_GTT_OP:
+            case BRANCH_GEQ_OP:
+            case BRANCH_LST_OP:
+            case BRANCH_LEQ_OP:
                 setuse(bb, x->r);
                 setuse(bb, x->s);
                 break;
-            case JMP_OP:
+            case JUMP_OP:
             case CALL_OP:
-            case ENT_OP:
-            case FIN_OP:
-            case LAB_OP:
+            case FN_START_OP:
+            case FN_END_OP:
+            case LABEL_OP:
                 continue;
-            case PUSH_OP:
-            case PADR_OP:
+            case PUSH_VAL_OP:
+            case PUSH_ADDR_OP:
             case POP_OP:
-            case RDI_OP:
-            case RDU_OP:
-            case RDC_OP:
+            case READ_INT_OP:
+            case READ_UINT_OP:
+            case READ_CHAR_OP:
                 setuse(bb, x->d);
                 if (x->r) {
                     setuse(bb, x->r);
                 }
                 break;
-            case WRS_OP:
-            case WRI_OP:
-            case WRU_OP:
-            case WRC_OP:
+            case WRITE_STRING_OP:
+            case WRITE_INT_OP:
+            case WRITE_UINT_OP:
+            case WRITE_CHAR_OP:
                 setdef(bb, x->d);
                 break;
             default:
@@ -279,7 +279,7 @@ static void elim_dead_assign(bb_t *bb) {
 
         // check if eliminate current instruction
         syment_t *d = curr->d;
-        if (curr->op != ASS_OP) {
+        if (curr->op != STORE_VAR_OP) {
             goto dupinst;
         }
         if (d->cate != VAR_OBJ && d->cate != TMP_OBJ) {

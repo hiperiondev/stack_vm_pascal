@@ -181,67 +181,67 @@ static void asmbl_load_op(inst_t *instruction) {
     printf("\n");
 }
 
-static void asmbl_ass_op(inst_t *instruction) {
+static void asmbl_store_var_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_asa_op(inst_t *instruction) {
+static void asmbl_store_array_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_equ_op(inst_t *instruction) {
+static void asmbl_branch_equ_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_neq_op(inst_t *instruction) {
+static void asmbl_branch_neq_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_gtt_op(inst_t *instruction) {
+static void asmbl_branch_gtt_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_geq_op(inst_t *instruction) {
+static void asmbl_branch_geq_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_lst_op(inst_t *instruction) {
+static void asmbl_branch_lst_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_leq_op(inst_t *instruction) {
+static void asmbl_branch_leq_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_jmp_op(inst_t *instruction) {
+static void asmbl_jump_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_push_op(inst_t *instruction) {
+static void asmbl_push_val_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_padr_op(inst_t *instruction) {
+static void asmbl_push_addr_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
@@ -259,49 +259,61 @@ static void asmbl_call_op(inst_t *instruction) {
     printf("\n");
 }
 
-static void asmbl_ent_op(inst_t *instruction) {
+static void asmbl_fn_start_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_fin_op(inst_t *instruction) {
+static void asmbl_fn_end_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_rdi_op(inst_t *instruction) {
+static void asmbl_read_int_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_rdc_op(inst_t *instruction) {
+static void asmbl_read_uint_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_wrs_op(inst_t *instruction) {
+static void asmbl_read_char_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_wri_op(inst_t *instruction) {
+static void asmbl_write_string_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_wrc_op(inst_t *instruction) {
+static void asmbl_write_int_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
 }
 
-static void asmbl_lab_op(inst_t *instruction) {
+static void asmbl_write_uint_op(inst_t *instruction) {
+    printf("%s\n", opcode[instruction->op]);
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_write_char_op(inst_t *instruction) {
+    printf("%s\n", opcode[instruction->op]);
+    print_args(instruction);
+    printf("\n");
+}
+
+static void asmbl_label_op(inst_t *instruction) {
     printf("%s\n", opcode[instruction->op]);
     print_args(instruction);
     printf("\n");
@@ -340,38 +352,38 @@ void genasm(void) {
             case LOAD_OP:
                 asmbl_load_op(instruction);
                 break;
-            case ASS_OP:
-                asmbl_ass_op(instruction);
+            case STORE_VAR_OP:
+                asmbl_store_var_op(instruction);
                 break;
-            case ASA_OP:
-                asmbl_asa_op(instruction);
+            case STORE_ARRAY_OP:
+                asmbl_store_array_op(instruction);
                 break;
-            case EQU_OP:
-                asmbl_equ_op(instruction);
+            case BRANCH_EQU_OP:
+                asmbl_branch_equ_op(instruction);
                 break;
-            case NEQ_OP:
-                asmbl_neq_op(instruction);
+            case BRANCH_NEQ_OP:
+                asmbl_branch_neq_op(instruction);
                 break;
-            case GTT_OP:
-                asmbl_gtt_op(instruction);
+            case BRANCH_GTT_OP:
+                asmbl_branch_gtt_op(instruction);
                 break;
-            case GEQ_OP:
-                asmbl_geq_op(instruction);
+            case BRANCH_GEQ_OP:
+                asmbl_branch_geq_op(instruction);
                 break;
-            case LST_OP:
-                asmbl_lst_op(instruction);
+            case BRANCH_LST_OP:
+                asmbl_branch_lst_op(instruction);
                 break;
-            case LEQ_OP:
-                asmbl_leq_op(instruction);
+            case BRANCH_LEQ_OP:
+                asmbl_branch_leq_op(instruction);
                 break;
-            case JMP_OP:
-                asmbl_jmp_op(instruction);
+            case JUMP_OP:
+                asmbl_jump_op(instruction);
                 break;
-            case PUSH_OP:
-                asmbl_push_op(instruction);
+            case PUSH_VAL_OP:
+                asmbl_push_val_op(instruction);
                 break;
-            case PADR_OP:
-                asmbl_padr_op(instruction);
+            case PUSH_ADDR_OP:
+                asmbl_push_addr_op(instruction);
                 break;
             case POP_OP:
                 asmbl_pop_op(instruction);
@@ -379,29 +391,35 @@ void genasm(void) {
             case CALL_OP:
                 asmbl_call_op(instruction);
                 break;
-            case ENT_OP:
-                asmbl_ent_op(instruction);
+            case FN_START_OP:
+                asmbl_fn_start_op(instruction);
                 break;
-            case FIN_OP:
-                asmbl_fin_op(instruction);
+            case FN_END_OP:
+                asmbl_fn_end_op(instruction);
                 break;
-            case RDI_OP:
-                asmbl_rdi_op(instruction);
+            case READ_INT_OP:
+                asmbl_read_int_op(instruction);
                 break;
-            case RDC_OP:
-                asmbl_rdc_op(instruction);
+            case READ_UINT_OP:
+                asmbl_read_uint_op(instruction);
                 break;
-            case WRS_OP:
-                asmbl_wrs_op(instruction);
+            case READ_CHAR_OP:
+                asmbl_read_char_op(instruction);
                 break;
-            case WRI_OP:
-                asmbl_wri_op(instruction);
+            case WRITE_STRING_OP:
+                asmbl_write_string_op(instruction);
                 break;
-            case WRC_OP:
-                asmbl_wrc_op(instruction);
+            case WRITE_INT_OP:
+                asmbl_write_int_op(instruction);
                 break;
-            case LAB_OP:
-                asmbl_lab_op(instruction);
+            case WRITE_UINT_OP:
+                asmbl_write_uint_op(instruction);
+                break;
+            case WRITE_CHAR_OP:
+                asmbl_write_char_op(instruction);
+                break;
+            case LABEL_OP:
+                asmbl_label_op(instruction);
                 break;
             default:
                 unlikely();

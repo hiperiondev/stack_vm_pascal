@@ -25,44 +25,51 @@ extern char *opcode[32];
 // Instruction Operator Type
 typedef enum _inst_op_enum {
     // Arithmetic
-    ADD_OP,  // 0x00 d, e, x
-    SUB_OP,  // 0x01 d, e, r
-    MUL_OP,  // 0x02 d, e, r
-    DIV_OP,  // 0x03 d, e, r
-    INC_OP,  // 0x04 d
-    DEC_OP,  // 0x05 d
-    NEG_OP,  // 0x06 d, r
+    ADD_OP,          // 0x00 d, e, x
+    SUB_OP,          // 0x01 d, e, r
+    MUL_OP,          // 0x02 d, e, r
+    DIV_OP,          // 0x03 d, e, r
+    INC_OP,          // 0x04 d
+    DEC_OP,          // 0x05 d
+    NEG_OP,          // 0x06 d, r
+
     // Load and Store
-    LOAD_OP, // 0x07 d, r, e
-    ASS_OP,  // 0x08 d, r / d, beg
-    ASA_OP,  // 0x09 d, r, s
+    LOAD_OP,         // 0x07 d, r, e
+    STORE_VAR_OP,    // 0x08 d, r / d, beg
+    STORE_ARRAY_OP,  // 0x09 d, r, s
+
     // Conditional Branch
-    EQU_OP,  // 0x0a label, r, s
-    NEQ_OP,  // 0x0b label, r s
-    GTT_OP,  // 0x0c fordone, d, end / label, r, s
-    GEQ_OP,  // 0x0d label, r, s
-    LST_OP,  // 0x0e fordone, d, end / lable, r, s
-    LEQ_OP,  // 0x0f label, r, s
+    BRANCH_EQU_OP,   // 0x0a label, r, s
+    BRANCH_NEQ_OP,   // 0x0b label, r s
+    BRANCH_GTT_OP,   // 0x0c fordone, d, end / label, r, s
+    BRANCH_GEQ_OP,   // 0x0d label, r, s
+    BRANCH_LST_OP,   // 0x0e fordone, d, end / lable, r, s
+    BRANCH_LEQ_OP,   // 0x0f label, r, s
+
     // Unconditional Branch
-    JMP_OP,  // 0x10 ifdone / loopstart / forstart
+    JUMP_OP,         // 0x10 ifdone / loopstart / forstart
+
     // Stack Management
-    PUSH_OP, // 0x11 d
-    PADR_OP, // 0x12 d, NULL / d, r
-    POP_OP,  // 0x13 NULL
+    PUSH_VAL_OP,     // 0x11 d
+    PUSH_ADDR_OP,    // 0x12 d, NULL / d, r
+    POP_OP,          // 0x13 NULL
+
     // Function Management
-    CALL_OP, // 0x14 d, e
-    ENT_OP,  // 0x15 entry
-    FIN_OP,  // 0x16 entry
+    CALL_OP,         // 0x14 d, e
+    FN_START_OP,     // 0x15 entry
+    FN_END_OP,       // 0x16 entry
+
     // I/O Management
-    RDI_OP,  // 0x17 d
-    RDU_OP,  // 0x18 d
-    RDC_OP,  // 0x19 d
-    WRS_OP,  // 0x1a d
-    WRI_OP,  // 0x1b d
-    WRU_OP,  // 0x1c d
-    WRC_OP,  // 0x1d d
+    READ_INT_OP,     // 0x17 d
+    READ_UINT_OP,    // 0x18 d
+    READ_CHAR_OP,    // 0x19 d
+    WRITE_STRING_OP, // 0x1a d
+    WRITE_INT_OP,    // 0x1b d
+    WRITE_UINT_OP,   // 0x1c d
+    WRITE_CHAR_OP,   // 0x1d d
+
     // Label Marker
-    LAB_OP   // 0x1e ifthen / ifdone / loopstart / loopdone / forstart / fordone
+    LABEL_OP   // 0x1e ifthen / ifdone / loopstart / loopdone / forstart / fordone
 } op_t;
 
 // Instruction struct

@@ -51,9 +51,9 @@ static void gen_pgm(pgm_node_t *node) {
 
     // main function
     syment_t *entry = node->entry->symbol;
-    emit1(ENT_OP, entry);
+    emit1(FN_START_OP, entry);
     gen_comp_stmt(b->csp);
-    emit1(FIN_OP, entry);
+    emit1(FN_END_OP, entry);
 }
 
 static void gen_pf_dec_list(pf_dec_list_node_t *node) {
@@ -78,9 +78,9 @@ static void gen_proc_decf(proc_dec_node_t *node) {
         block_node_t *b = t->pdp->bp;
         gen_pf_dec_list(b->pfdlp);
 
-        emit1(ENT_OP, t->pdp->php->idp->symbol);
+        emit1(FN_START_OP, t->pdp->php->idp->symbol);
         gen_comp_stmt(b->csp);
-        emit1(FIN_OP, t->pdp->php->idp->symbol);
+        emit1(FN_END_OP, t->pdp->php->idp->symbol);
     }
 }
 
@@ -90,9 +90,9 @@ static void gen_fun_decf(fun_dec_node_t *node) {
         block_node_t *b = t->fdp->bp;
 
         gen_pf_dec_list(b->pfdlp);
-        emit1(ENT_OP, t->fdp->fhp->idp->symbol);
+        emit1(FN_START_OP, t->fdp->fhp->idp->symbol);
         gen_comp_stmt(b->csp);
-        emit1(FIN_OP, t->fdp->fhp->idp->symbol);
+        emit1(FN_END_OP, t->fdp->fhp->idp->symbol);
     }
 }
 
@@ -142,16 +142,16 @@ static void gen_assign_stmt(assign_stmt_node_t *node) {
     switch (node->kind) {
         case NORM_ASSGIN:
             r = gen_expr(node->rep);
-            emit2(ASS_OP, d, r);
+            emit2(STORE_VAR_OP, d, r);
             break;
         case FUN_ASSGIN:
             r = gen_expr(node->rep);
-            emit2(ASS_OP, d, r);
+            emit2(STORE_VAR_OP, d, r);
             break;
         case ARRAY_ASSGIN:
             s = gen_expr(node->lep);
             r = gen_expr(node->rep);
-            emit3(ASA_OP, d, r, s);
+            emit3(STORE_ARRAY_OP, d, r, s);
             break;
         default:
             unlikely();
@@ -167,10 +167,10 @@ static void gen_if_stmt(if_stmt_node_t *node) {
     if (node->ep) {
         gen_stmt(node->ep);
     }
-    emit1(JMP_OP, ifdone);
-    emit1(LAB_OP, ifthen);
+    emit1(JUMP_OP, ifdone);
+    emit1(LABEL_OP, ifthen);
     gen_stmt(node->tp);
-    emit1(LAB_OP, ifdone);
+    emit1(LABEL_OP, ifdone);
 }
 
 static void gen_repe_stmt(repe_stmt_node_t *node) {
@@ -178,11 +178,11 @@ static void gen_repe_stmt(repe_stmt_node_t *node) {
     loopstart = symalloc(node->stab, "@loopstart", LABEL_OBJ, VOID_TYPE);
     loopdone = symalloc(node->stab, "@loopdone", LABEL_OBJ, VOID_TYPE);
 
-    emit1(LAB_OP, loopstart);
+    emit1(LABEL_OP, loopstart);
     gen_stmt(node->sp);
     gen_cond(node->cp, loopdone);
-    emit1(JMP_OP, loopstart);
-    emit1(LAB_OP, loopdone);
+    emit1(JUMP_OP, loopstart);
+    emit1(LABEL_OP, loopdone);
 }
 
 static void gen_for_stmt(for_stmt_node_t *node) {
@@ -196,23 +196,23 @@ static void gen_for_stmt(for_stmt_node_t *node) {
 
     syment_t *d;
     d = node->idp->symbol;
-    emit2(ASS_OP, d, beg);
-    emit1(LAB_OP, forstart);
+    emit2(STORE_VAR_OP, d, beg);
+    emit1(LABEL_OP, forstart);
     switch (node->kind) {
         case TO_FOR:
-            emit3(GTT_OP, fordone, d, end);
+            emit3(BRANCH_GTT_OP, fordone, d, end);
             gen_stmt(node->sp);
             emit1(INC_OP, d);
-            emit1(JMP_OP, forstart);
-            emit1(LAB_OP, fordone);
+            emit1(JUMP_OP, forstart);
+            emit1(LABEL_OP, fordone);
             emit1(DEC_OP, d);
             break;
         case DOWNTO_FOR:
-            emit3(LST_OP, fordone, d, end);
+            emit3(BRANCH_LST_OP, fordone, d, end);
             gen_stmt(node->sp);
             emit1(DEC_OP, d);
-            emit1(JMP_OP, forstart);
-            emit1(LAB_OP, fordone);
+            emit1(JUMP_OP, forstart);
+            emit1(LABEL_OP, fordone);
             emit1(INC_OP, d);
             break;
         default:
@@ -236,13 +236,13 @@ static void gen_read_stmt(read_stmt_node_t *node) {
         d = t->idp->symbol;
         switch (d->type) {
             case CHAR_TYPE:
-                emit1(RDC_OP, d);
+                emit1(READ_CHAR_OP, d);
                 break;
             case INT_TYPE:
-                emit1(RDI_OP, d);
+                emit1(READ_INT_OP, d);
                 break;
             case UINT_TYPE:
-                emit1(RDU_OP, d);
+                emit1(READ_UINT_OP, d);
                 break;
             default:
         }
@@ -255,19 +255,19 @@ static void gen_write_stmt(write_stmt_node_t *node) {
         case STR_WRITE:
             d = symalloc(node->stab, "@write/str", STR_OBJ, STR_TYPE);
             strcopy(d->str, node->sp);
-            emit1(WRS_OP, d);
+            emit1(WRITE_STRING_OP, d);
             break;
         case ID_WRITE:
             d = gen_expr(node->ep);
             switch (d->type) {
                 case CHAR_TYPE:
-                    emit1(WRC_OP, d);
+                    emit1(WRITE_CHAR_OP, d);
                     break;
                 case INT_TYPE:
-                    emit1(WRI_OP, d);
+                    emit1(WRITE_INT_OP, d);
                     break;
                 case UINT_TYPE:
-                    emit1(WRU_OP, d);
+                    emit1(WRITE_UINT_OP, d);
                     break;
                 default:
                     unlikely();
@@ -276,17 +276,17 @@ static void gen_write_stmt(write_stmt_node_t *node) {
         case STRID_WRITE:
             d = symalloc(node->stab, "@write/str", STR_OBJ, STR_TYPE);
             strcopy(d->str, node->sp);
-            emit1(WRS_OP, d);
+            emit1(WRITE_STRING_OP, d);
             d = gen_expr(node->ep);
             switch (d->type) {
                 case CHAR_TYPE:
-                    emit1(WRC_OP, d);
+                    emit1(WRITE_CHAR_OP, d);
                     break;
                 case INT_TYPE:
-                    emit1(WRI_OP, d);
+                    emit1(WRITE_INT_OP, d);
                     break;
                 case UINT_TYPE:
-                    emit1(WRU_OP, d);
+                    emit1(WRITE_UINT_OP, d);
                     break;
                 default:
                     unlikely();
@@ -421,22 +421,22 @@ static void gen_cond(cond_node_t *node, syment_t *label) {
     s = gen_expr(node->rep);
     switch (node->kind) {
         case EQU_RELA:
-            emit3(EQU_OP, label, r, s);
+            emit3(BRANCH_EQU_OP, label, r, s);
             break;
         case NEQ_RELA:
-            emit3(NEQ_OP, label, r, s);
+            emit3(BRANCH_NEQ_OP, label, r, s);
             break;
         case GTT_RELA:
-            emit3(GTT_OP, label, r, s);
+            emit3(BRANCH_GTT_OP, label, r, s);
             break;
         case GEQ_RELA:
-            emit3(GEQ_OP, label, r, s);
+            emit3(BRANCH_GEQ_OP, label, r, s);
             break;
         case LST_RELA:
-            emit3(LST_OP, label, r, s);
+            emit3(BRANCH_LST_OP, label, r, s);
             break;
         case LEQ_RELA:
-            emit3(LEQ_OP, label, r, s);
+            emit3(BRANCH_LEQ_OP, label, r, s);
             break;
     }
 }
@@ -454,17 +454,17 @@ static void gen_arg_list(arg_list_node_t *node) {
     switch (t->refsym->cate) {
         case BYVAL_OBJ:
             d = gen_expr(t->ep);
-            emit1(PUSH_OP, d);
+            emit1(PUSH_VAL_OP, d);
             break;
         case BYREF_OBJ:
             d = t->argsym;
             switch (t->argsym->cate) {
                 case VAR_OBJ:
-                    emit2(PADR_OP, d, NULL);
+                    emit2(PUSH_ADDR_OP, d, NULL);
                     break;
                 case ARRAY_OBJ:
                     r = gen_expr(t->idx);
-                    emit2(PADR_OP, d, r);
+                    emit2(PUSH_ADDR_OP, d, r);
                     break;
                 default:
                     unlikely();

@@ -81,16 +81,16 @@ static bb_t* create_basic_block(void) {
         //     3. a label
         //     4. function enter/finish
         switch (leader->op) {
-            case EQU_OP:
-            case NEQ_OP:
-            case GTT_OP:
-            case GEQ_OP:
-            case LST_OP:
-            case LEQ_OP:
-            case JMP_OP:
-            case LAB_OP:
-            case ENT_OP:
-            case FIN_OP:
+            case BRANCH_EQU_OP:
+            case BRANCH_NEQ_OP:
+            case BRANCH_GTT_OP:
+            case BRANCH_GEQ_OP:
+            case BRANCH_LST_OP:
+            case BRANCH_LEQ_OP:
+            case JUMP_OP:
+            case LABEL_OP:
+            case FN_START_OP:
+            case FN_END_OP:
                 goto ok;
             default:
                 break;
@@ -100,13 +100,13 @@ static bb_t* create_basic_block(void) {
         //     1. conditional jump
         //     2. unconditional jump
         switch (x->op) {
-            case EQU_OP:
-            case NEQ_OP:
-            case GTT_OP:
-            case GEQ_OP:
-            case LST_OP:
-            case LEQ_OP:
-            case JMP_OP:
+            case BRANCH_EQU_OP:
+            case BRANCH_NEQ_OP:
+            case BRANCH_GTT_OP:
+            case BRANCH_GEQ_OP:
+            case BRANCH_LST_OP:
+            case BRANCH_LEQ_OP:
+            case JUMP_OP:
                 goto ok;
             default:
                 break;
@@ -123,11 +123,11 @@ void partition_basic_blocks(void) {
     leader = xhead;
     while (leader) {
         switch (leader->op) {
-            case ENT_OP:
+            case FN_START_OP:
                 thefunc = create_function_object();
                 leader = leader->next;
                 break;
-            case FIN_OP:
+            case FN_END_OP:
                 if (thefunc->scope != leader->d->scope) {
                     panic("ENTER_FINISH_NOT_MATCH");
                 }
@@ -153,7 +153,7 @@ static void link_basic_block(fun_t *fun) {
     for (bb = fun->bhead; bb; bb = bb->next) {
         // make lab2bb[...] map
         inst_t *x = bb->insts[0];
-        if (x->op == LAB_OP) {
+        if (x->op == LABEL_OP) {
             lab2bb[x->d->sid] = bb;
         }
 
@@ -174,13 +174,13 @@ static void link_basic_block(fun_t *fun) {
     for (bb = fun->bhead; bb; bb = bb->next) {
         inst_t *x = bb->insts[bb->total - 1];
         switch (x->op) {
-            case EQU_OP:
-            case NEQ_OP:
-            case GTT_OP:
-            case GEQ_OP:
-            case LST_OP:
-            case LEQ_OP:
-            case JMP_OP:
+            case BRANCH_EQU_OP:
+            case BRANCH_NEQ_OP:
+            case BRANCH_GTT_OP:
+            case BRANCH_GEQ_OP:
+            case BRANCH_LST_OP:
+            case BRANCH_LEQ_OP:
+            case JUMP_OP:
                 // get target basic block
                 target = lab2bb[x->d->sid];
                 // link bb->succ[...]

@@ -37,18 +37,18 @@ static bool check_dagable(bb_t *bb) {
     for (i = 0; i < bb->total; ++i) {
         x = bb->insts[i];
         switch (x->op) {
-            case ASA_OP:
-            case PUSH_OP:
-            case PADR_OP:
+            case STORE_ARRAY_OP:
+            case PUSH_VAL_OP:
+            case PUSH_ADDR_OP:
             case POP_OP:
             case CALL_OP:
-            case RDI_OP:
-            case RDU_OP:
-            case RDC_OP:
-            case WRS_OP:
-            case WRI_OP:
-            case WRU_OP:
-            case WRC_OP:
+            case READ_INT_OP:
+            case READ_UINT_OP:
+            case READ_CHAR_OP:
+            case WRITE_STRING_OP:
+            case WRITE_INT_OP:
+            case WRITE_UINT_OP:
+            case WRITE_CHAR_OP:
                 return FALSE;
             default:
                 continue;
@@ -146,34 +146,34 @@ static void construct_graph(bb_t *bb) {
                 out = find_nonleaf(graph, x->op, lhs, rhs);
                 break;
             case NEG_OP:
-            case ASS_OP:
+            case STORE_VAR_OP:
                 lhs = find_leaf(graph, x->r);
                 out = find_nonleaf(graph, x->op, lhs, rhs);
                 break;
-            case ASA_OP:
-            case PUSH_OP:
-            case PADR_OP:
+            case STORE_ARRAY_OP:
+            case PUSH_VAL_OP:
+            case PUSH_ADDR_OP:
             case POP_OP:
             case CALL_OP:
-            case ENT_OP:
-            case FIN_OP:
-            case RDI_OP:
-            case RDU_OP:
-            case RDC_OP:
-            case WRS_OP:
-            case WRI_OP:
-            case WRU_OP:
-            case WRC_OP:
+            case FN_START_OP:
+            case FN_END_OP:
+            case READ_INT_OP:
+            case READ_UINT_OP:
+            case READ_CHAR_OP:
+            case WRITE_STRING_OP:
+            case WRITE_INT_OP:
+            case WRITE_UINT_OP:
+            case WRITE_CHAR_OP:
                 panic("UNSUPPORT_INSTRUCTION");
                 break;
-            case EQU_OP:
-            case NEQ_OP:
-            case GTT_OP:
-            case GEQ_OP:
-            case LST_OP:
-            case LEQ_OP:
-            case JMP_OP:
-            case LAB_OP:
+            case BRANCH_EQU_OP:
+            case BRANCH_NEQ_OP:
+            case BRANCH_GTT_OP:
+            case BRANCH_GEQ_OP:
+            case BRANCH_LST_OP:
+            case BRANCH_LEQ_OP:
+            case JUMP_OP:
+            case LABEL_OP:
             default:
                 continue;
         }
