@@ -56,11 +56,11 @@ static void print_table(symtab_t *table) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            printf("        symbol id=%d, name=%s, category=%s, type=%s, value=%d, label=%s\n", e->sid, e->name, category[e->cate], value_type[e->type],
+            printf("        {symbol id=%d, name=%s, category=%s, type=%s, value=%d, label=%s}\n", e->sid, e->name, category[e->cate], value_type[e->type],
                     e->initval, e->label);
         }
     }
-    printf("        argument offset: %d, variable offset: %d, temp offset: %d\n", table->argoff, table->varoff, table->tmpoff);
+    printf("        {argument offset: %d, variable offset: %d, temp offset: %d}\n", table->argoff, table->varoff, table->tmpoff);
 }
 
 static void print_syment(syment_t *symbol) {
@@ -68,7 +68,7 @@ static void print_syment(syment_t *symbol) {
         return;
 
     printf("    [symbol entry]\n");
-    printf("      symbol id: %d, ", symbol->sid);
+    printf("      {symbol id: %d, ", symbol->sid);
     printf("name: %s, ", symbol->name);
     printf("category: %s, ", category[symbol->cate]);
     printf("type: %s, ", value_type[symbol->type]);
@@ -77,7 +77,7 @@ static void print_syment(syment_t *symbol) {
     printf("string: %s, ", strlen(symbol->str) == 0 ? "NULL" : symbol->str);
     printf("label: %s, ", symbol->label);
     printf("offset: %d, ", symbol->off);
-    printf("line number: %d\n", symbol->lineno);
+    printf("line number: %d}\n", symbol->lineno);
 
     if (symbol->scope != NULL) {
         printf("      [scope]\n");
@@ -104,13 +104,14 @@ static void head(syment_t *symbol) {
 }
 
 static void print_args(inst_t *instruction) {
+    printf ("[args]\n");
     if (instruction->d != NULL) {
         printf("  [arg d]\n");
         head(instruction->d);
         print_syment(instruction->d);
         printf("  [end arg d]\n");
     } else
-        printf("  [arg d]\n    NONE\n  [end arg d]\n");
+        printf("  [arg d]\n    {NONE}\n  [end arg d]\n");
 
     if (instruction->r != NULL) {
         printf("  [arg r]\n");
@@ -118,7 +119,7 @@ static void print_args(inst_t *instruction) {
         print_syment(instruction->r);
         printf("  [end arg r]\n");
     } else
-        printf("  [arg r]\n    NONE\n  [end arg r]\n");
+        printf("  [arg r]\n    {NONE}\n  [end arg r]\n");
 
     if (instruction->s != NULL) {
         printf("  [arg s]\n");
@@ -126,7 +127,8 @@ static void print_args(inst_t *instruction) {
         print_syment(instruction->s);
         printf("  [end arg s]\n");
     } else
-        printf("  [arg s]\n    NONE\n  [end arg s]\n");
+        printf("  [arg s]\n    {NONE}\n  [end arg s]\n");
+    printf ("[end args]\n");
 }
 
 ///////////////////// instructions /////////////////////
