@@ -144,66 +144,66 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
     param_t *head = symbol->phead;
     if (head == NULL)
         return;
-    printf("%*s[arg]\n", ident, "");
+    printf(";%*s[arg]\n", ident, "");
     while (head != NULL) {
-        printf("%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type, head->symbol->name,
+        printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type, head->symbol->name,
                 category[head->symbol->cate], value_type[head->symbol->type]);
         head = head->next;
     }
-    printf("%*s[end arg]\n", ident, "");
+    printf(";%*s[end arg]\n", ident, "");
 }
 
 static void fn_locales(symtab_t *table, uint32_t ident) {
-    printf("%*s[locale]\n", ident, "");
+    printf(";%*s[locale]\n", ident, "");
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == VARIABLE_OBJ || e->cate == ARRAY_OBJ)
-                printf("%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name,
+                printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name,
                         category[e->cate], value_type[e->type]);
         }
     }
-    printf("%*s[end locale]\n", ident, "");
+    printf(";%*s[end locale]\n", ident, "");
 }
 
 static void fn_temps(symtab_t *table, uint32_t ident) {
-    printf("%*s[temp]\n", ident, "");
+    printf(";%*s[temp]\n", ident, "");
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == TEMP_OBJ)
-                printf("%*s%s %u %u ; %s %s\n", ident + 2, "", e->label, e->type, (int)e->initval, e->name, value_type[e->type]);
+                printf(";%*s%s %u %u ; %s %s\n", ident + 2, "", e->label, e->type, (int)e->initval, e->name, value_type[e->type]);
         }
     }
-    printf("%*s[end temp]\n", ident, "");
+    printf(";%*s[end temp]\n", ident, "");
 }
 
-static void fn_numbers(symtab_t *table, uint32_t ident) {
-    printf("%*s[number]\n", ident, "");
+static void fn_literals(symtab_t *table, uint32_t ident) {
+    printf(";%*s[literal]\n", ident, "");
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == NUMBER_OBJ)
-                printf("%*s%s %ld ; LITERAL\n", ident + 2, "", e->label, e->initval);
+                printf(";%*s%s %ld\n", ident + 2, "", e->label, e->initval);
         }
     }
-    printf("%*s[end number]\n", ident, "");
+    printf(";%*s[end literal]\n", ident, "");
 }
 
 static void fn_strings(symtab_t *table, uint32_t ident) {
-    printf("%*s[string]\n", ident, "");
+    printf(";%*s[string]\n", ident, "");
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == STRING_OBJ)
-                printf("%*s%s %u %u ; %s %s\n", ident + 2, "", e->label, e->type, (int)e->initval, e->name, value_type[e->type]);
+                printf(";%*s%s \"%s\"\n", ident + 2, "", e->label, e->str);
         }
     }
-    printf("%*s[end string]\n", ident, "");
+    printf(";%*s[end string]\n", ident, "");
 }
 
 
@@ -216,11 +216,11 @@ static void asmbl_fn_start_op(inst_t *instruction) {
     printf("%s %04d %04d %04d %s\n", instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff,
             instruction->d->label);
 
-    fn_args(instruction->d, (int) strlen(opcode[instruction->op]) + 1);
-    fn_locales(instruction->d->scope, (int) strlen(opcode[instruction->op]) + 1);
-    fn_temps(instruction->d->scope, (int) strlen(opcode[instruction->op]) + 1);
-    fn_numbers(instruction->d->scope, (int) strlen(opcode[instruction->op]) + 1);
-    fn_strings(instruction->d->scope, (int) strlen(opcode[instruction->op]) + 1);
+    fn_args(instruction->d, (int) strlen(opcode[instruction->op]));
+    fn_locales(instruction->d->scope, (int) strlen(opcode[instruction->op]));
+    fn_temps(instruction->d->scope, (int) strlen(opcode[instruction->op]));
+    fn_literals(instruction->d->scope, (int) strlen(opcode[instruction->op]));
+    fn_strings(instruction->d->scope, (int) strlen(opcode[instruction->op]));
 
     printf("\n");
     //print_args(instruction);
