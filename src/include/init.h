@@ -1,5 +1,5 @@
 /*
- * @ init.h
+ * @init.h
  *
  * @brief Pascal for Stack VM
  * @details

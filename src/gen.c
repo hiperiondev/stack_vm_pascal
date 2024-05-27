@@ -1,5 +1,5 @@
 /*
- * @ gen.c
+ * @gen.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -383,13 +383,8 @@ static syment_t* gen_factor(factor_node_t *node) {
             emit3(LOAD_ARRAY_OP, d, r, e);
             break;
         case UNSIGN_FACTOR:
-            if (node->sign) {
-                d = symalloc(node->stab, "@factor/usi", NUMBER_OBJ, INT_TYPE);
-                d->initval = node->value;
-            } else {
-                d = symalloc(node->stab, "@factor/usi", NUMBER_OBJ, UINT_TYPE);
-                d->initval = node->uvalue;
-            }
+            d = symalloc(node->stab, "@factor/usi", NUMBER_OBJ, LITERAL_TYPE);
+            d->initval = node->value;
             break;
         case CHAR_FACTOR:
             d = symalloc(node->stab, "@factor/char", NUMBER_OBJ, CHAR_TYPE);

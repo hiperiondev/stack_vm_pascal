@@ -1,5 +1,5 @@
 /*
- * @ post.c
+ * @post.c
  *
  * @brief Pascal for Stack VM
  * @details

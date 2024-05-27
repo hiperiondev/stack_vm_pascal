@@ -1,5 +1,5 @@
 /*
- * @ scan.c
+ * @scan.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -42,23 +42,23 @@ token_t gettok(void) {
 
     // the state machine main loop
     while (state != DONE) {
-        int ch = readc(FALSE);
-        save = TRUE;
+        int ch = readc(false);
+        save = true;
         // state machine
         switch (state) {
             case START:
                 if (isspace(ch)) {
-                    save = FALSE;
+                    save = false;
                 } else if (isdigit(ch)) {
                     state = INUNS;
                 } else if (ch == '"') {
-                    save = FALSE;
+                    save = false;
                     state = INSTR;
                 } else if (ch == '\'') {
-                    save = FALSE;
+                    save = false;
                     state = INCHA;
                 } else if (ch == '{') {
-                    save = FALSE;
+                    save = false;
                     state = INCMT;
                 } else if (isalpha(ch)) {
                     state = INIDE;
@@ -72,7 +72,7 @@ token_t gettok(void) {
                     state = DONE;
                     switch (ch) {
                         case EOF:
-                            save = FALSE;
+                            save = false;
                             curr = ENDFILE;
                             break;
                         case '.':
@@ -124,7 +124,7 @@ token_t gettok(void) {
                 }
                 break;
             case INCMT: // in comment
-                save = FALSE;
+                save = false;
                 if (ch == EOF) {
                     state = DONE;
                     curr = ENDFILE;
@@ -135,7 +135,7 @@ token_t gettok(void) {
             case INSTR: // in string
                 if (ch == '"') {
                     state = DONE;
-                    save = FALSE;
+                    save = false;
                     curr = MC_STR;
                 } else if (isprint(ch)) {
                     // only allow printable character
@@ -144,7 +144,7 @@ token_t gettok(void) {
                 } else {
                     state = DONE;
                     if (ch == EOF) {
-                        save = FALSE;
+                        save = false;
                         i = 0;
                         curr = ENDFILE;
                     }
@@ -153,13 +153,13 @@ token_t gettok(void) {
             case INCHA: // in character
                 if (ch == '\'') {
                     state = DONE;
-                    save = FALSE;
+                    save = false;
                     curr = MC_CH;
                 } else if (isdigit(ch) || isalpha(ch)) {
                     // skip case
                 } else {
                     if (ch == EOF) {
-                        save = FALSE;
+                        save = false;
                         i = 0;
                         curr = ENDFILE;
                         state = DONE;
@@ -169,7 +169,7 @@ token_t gettok(void) {
             case INUNS: // in unsign number
                 if (!isdigit(ch)) {
                     unreadc();
-                    save = FALSE;
+                    save = false;
                     state = DONE;
                     curr = MC_UNS;
                 }
@@ -177,7 +177,7 @@ token_t gettok(void) {
             case INIDE: // in identifier
                 if (!(isdigit(ch) || isalpha(ch))) {
                     unreadc();
-                    save = FALSE;
+                    save = false;
                     state = DONE;
                     curr = MC_ID;
                 }
@@ -190,7 +190,7 @@ token_t gettok(void) {
                     curr = SS_NEQ;
                 } else {
                     unreadc();
-                    save = FALSE;
+                    save = false;
                     curr = SS_LST;
                 }
                 break;
@@ -200,7 +200,7 @@ token_t gettok(void) {
                     curr = SS_ASGN;
                 } else {
                     unreadc();
-                    save = FALSE;
+                    save = false;
                     curr = SS_COLON;
                 }
                 break;
@@ -210,7 +210,7 @@ token_t gettok(void) {
                     curr = SS_GEQ;
                 } else {
                     unreadc();
-                    save = FALSE;
+                    save = false;
                     curr = SS_GTT;
                 }
                 break;
@@ -247,8 +247,8 @@ token_t gettok(void) {
 // Source Code Line Buffer
 char linebuf[MAXLINEBUF];
 int bufsize = 0;
-// when meet EOF, then set done to TRUE
-static bool fileend = FALSE;
+// when meet EOF, then set done to true
+static bool fileend = false;
 
 // hold file scan postion (line, column)
 int lineno = 0;
@@ -262,7 +262,7 @@ static int readc(bool peek) {
 
     lineno++;
     if (fgets(linebuf, MAXLINEBUF - 1, source) == NULL) {
-        fileend = TRUE;
+        fileend = true;
         return EOF;
     }
     dbg("source L%03d: %s", lineno, linebuf);

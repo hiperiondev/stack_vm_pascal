@@ -1,5 +1,5 @@
 /*
- * @ error.h
+ * @error.h
  *
  * @brief Pascal for Stack VM
  * @details

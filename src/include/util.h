@@ -1,5 +1,5 @@
 /*
- * @ util.h
+ * @util.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -18,10 +18,11 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include "limits.h"
-#include "common.h"
 #include <stdio.h>
 #include <string.h>
+
+#include "limits.h"
+#include "common.h"
 
 // common string buffer
 extern char prtbuf[MAXSTRBUF];

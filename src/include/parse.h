@@ -1,5 +1,5 @@
 /*
- * @ parse.h
+ * @parse.h
  *
  * @brief Pascal for Stack VM
  * @details

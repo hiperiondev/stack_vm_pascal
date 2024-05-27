@@ -1,5 +1,5 @@
 /*
- * @ init.c
+ * @init.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,14 +15,17 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
+#include <string.h>
+#include <unistd.h>
+#include <stdint.h>
+#include <stdbool.h>
+
 #include "common.h"
 #include "debug.h"
 #include "error.h"
 #include "global.h"
 #include "limits.h"
 #include "util.h"
-#include <string.h>
-#include <unistd.h>
 
 // constants
 char PL0E_NAME[MAXSTRLEN] = "stack_vm_pascal";
@@ -33,15 +36,15 @@ char PL0E_OBJECT[MAXSTRLEN] = "input.o";
 char PL0E_TARGET[MAXSTRLEN] = "a.out";
 
 // options
-bool PL0E_OPT_QUIET = FALSE;
-bool PL0E_OPT_VERBOSE = FALSE;
-bool PL0E_OPT_KEEP_NASM_FILE = FALSE;
-bool PL0E_OPT_KEEP_OBJECT_FILE = FALSE;
-bool PL0E_OPT_SET_TARGET_NAME = FALSE;
+bool PL0E_OPT_QUIET = false;
+bool PL0E_OPT_VERBOSE = false;
+bool PL0E_OPT_KEEP_NASM_FILE = false;
+bool PL0E_OPT_KEEP_OBJECT_FILE = false;
+bool PL0E_OPT_SET_TARGET_NAME = false;
 
 // debug
-bool echo = FALSE;
-bool silent = FALSE;
+bool echo = false;
+bool silent = false;
 
 // files
 FILE *source = NULL;
@@ -54,27 +57,27 @@ void pl0c_read_args(int argc, char *argv[]) {
     int i;
     for (i = 1; i < argc; ++i) {
         if (!strcmp("-q", argv[i])) {
-            PL0E_OPT_QUIET = TRUE;
-            echo = FALSE;
-            silent = TRUE;
+            PL0E_OPT_QUIET = true;
+            echo = false;
+            silent = true;
             continue;
         }
         if (!strcmp("-v", argv[i])) {
-            PL0E_OPT_VERBOSE = TRUE;
-            echo = TRUE;
-            silent = FALSE;
+            PL0E_OPT_VERBOSE = true;
+            echo = true;
+            silent = false;
             continue;
         }
         if (!strcmp("-s", argv[i])) {
-            PL0E_OPT_KEEP_NASM_FILE = TRUE;
+            PL0E_OPT_KEEP_NASM_FILE = true;
             continue;
         }
         if (!strcmp("-c", argv[i])) {
-            PL0E_OPT_KEEP_OBJECT_FILE = TRUE;
+            PL0E_OPT_KEEP_OBJECT_FILE = true;
             continue;
         }
         if (!strcmp("-o", argv[i])) {
-            PL0E_OPT_SET_TARGET_NAME = TRUE;
+            PL0E_OPT_SET_TARGET_NAME = true;
             i++;
             if (i == argc) {
                 panic("should give target file name after -o");

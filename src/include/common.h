@@ -1,5 +1,5 @@
 /*
- * @ common.h
+ * @common.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -19,14 +19,6 @@
 #define _COMMON_H_
 
 #include <stdint.h>
-
-#ifndef FALSE
-#define FALSE 0
-#endif
-
-#ifndef TRUE
-#define TRUE 1
-#endif
 
 extern void **memtrack;
 extern unsigned long memtrack_qty;

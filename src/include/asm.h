@@ -1,5 +1,5 @@
 /*
- * @ asm.h
+ * @asm.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -17,8 +17,6 @@
 
 #ifndef _ASM_H_
 #define _ASM_H_
-
-#include "ir.h"
 
 void genasm(void);
 

@@ -1,5 +1,5 @@
 /*
- * @ conv.c
+ * @conv.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -430,14 +430,10 @@ tnode_t* conv_factor_node(factor_node_t *t) {
             addchild(d, conv_expr_node(t->ep), "ep");
             break;
         case UNSIGN_FACTOR:
-            if (t->sign)
-                sprintf(buf, "%d", t->value);
-            else
-                sprintf(buf, "%u", t->uvalue);
-            strcopy(d->extra, buf);
+                sprintf(buf, "%ld", t->value);
             break;
         case CHAR_FACTOR:
-            sprintf(buf, "'%c'", t->value);
+            sprintf(buf, "'%c'", (char)t->value);
             strcopy(d->extra, buf);
             break;
         case EXPR_FACTOR:

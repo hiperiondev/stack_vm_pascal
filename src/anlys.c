@@ -1,5 +1,5 @@
 /*
- * @ anlys.c
+ * @anlys.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -57,12 +57,13 @@ static type_t infer_expr_type(expr_node_t *node);
 static type_t infer_term_type(term_node_t *node);
 static type_t infer_factor_type(factor_node_t *node);
 
-char *typerepr[5] = {
+char *typerepr[6] = {
         [0] = "_V", // VOID_TYPE
         [1] = "_I", // INT_TYPE
         [2] = "_U", // UINT_TYPE
         [3] = "_C", // CHAR_TYPE
         [4] = "_S", // STR_TYPE
+        [5] = "_L", // LITERAL_TYPE
 };
 
 static type_t infer_expr_type(expr_node_t *node) {
@@ -77,6 +78,8 @@ static type_t infer_expr_type(expr_node_t *node) {
             ltyp = INT_TYPE;
         } else if (ltyp == UINT_TYPE && rtyp == UINT_TYPE) {
             ltyp = UINT_TYPE;
+        } else if (ltyp == LITERAL_TYPE && rtyp == LITERAL_TYPE) {
+            ltyp = LITERAL_TYPE;
         }
     }
     return ltyp;
@@ -94,6 +97,8 @@ static type_t infer_term_type(term_node_t *node) {
             ltyp = INT_TYPE;
         } else if (ltyp == UINT_TYPE && rtyp == UINT_TYPE) {
             ltyp = UINT_TYPE;
+        }  else if (ltyp == LITERAL_TYPE && rtyp == LITERAL_TYPE) {
+            ltyp = LITERAL_TYPE;
         }
     }
     return ltyp;
@@ -108,7 +113,7 @@ static type_t infer_factor_type(factor_node_t *node) {
             idp = node->idp;
             e = symfind(idp->name);
             if (!e) {
-                giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+                giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
             }
             return e->type;
         case ARRAY_FACTOR:
@@ -116,17 +121,18 @@ static type_t infer_factor_type(factor_node_t *node) {
             idp = node->idp;
             e = symfind(idp->name);
             if (!e) {
-                giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+                giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
             }
             if (e->cate != ARRAY_OBJ) {
-                giveup(ERTYPE, "L%d: symbol %s type is not array.", idp->line, idp->name);
+                giveup(ERTYPE, "line %d: symbol %s type is not array.", idp->line, idp->name);
             }
             return e->type;
         case UNSIGN_FACTOR:
-            if (node->sign)
-                return INT_TYPE;
-            else
-                return UINT_TYPE;
+            //if (node->sign)
+            //    return INT_TYPE;
+            //else
+            //    return UINT_TYPE;
+            return LITERAL_TYPE;
         case CHAR_FACTOR:
             return CHAR_TYPE;
         case EXPR_FACTOR:
@@ -148,10 +154,17 @@ static void make_symkey(char *key, param_t *phead) {
     }
 }
 
-static void make_symkey2(char *key, arg_list_node_t *arglist) {
+static void make_symkey2(char *key, arg_list_node_t *arglist, bool lit_to_int) {
     arg_list_node_t *a = NULL;
     for (a = arglist; a; a = a->next) {
         type_t typ = infer_expr_type(a->ep);
+        if (typ == LITERAL_TYPE) {
+            if (lit_to_int)
+                typ = INT_TYPE;
+            else
+                typ = UINT_TYPE;
+        }
+
         strncat(key, typerepr[typ], MAXSTRLEN - 1);
     }
 }
@@ -181,7 +194,7 @@ static void anlys_const_decf(const_dec_node_t *node) {
         ident_node_t *idp = t->cdp->idp;
         syment_t *e = symget(idp->name);
         if (e) {
-            rescue(DUPSYM, "L%d: const %s already declared.", idp->line, idp->name);
+            rescue(DUPSYM, "line %d: const %s already declared.", idp->line, idp->name);
         } else {
             e = syminit(idp);
         }
@@ -198,7 +211,7 @@ static void anlys_var_decf(var_dec_node_t *node) {
             ident_node_t *idp = p->idp;
             syment_t *e = symget(idp->name);
             if (e) {
-                rescue(DUPSYM, "L%d: variable %s already declared.", idp->line, idp->name);
+                rescue(DUPSYM, "line %d: variable %s already declared.", idp->line, idp->name);
             } else {
                 e = syminit(idp);
             }
@@ -264,7 +277,7 @@ static void anlys_proc_head(proc_head_node_t *node) {
 
     syment_t *e = symget2(parent, pname);
     if (e) {
-        rescue(DUPSYM, "L%d: procedure %s already declared.", idp->line, idp->name);
+        rescue(DUPSYM, "line %d: procedure %s already declared.", idp->line, idp->name);
     } else {
         e = syminit2(parent, idp, pname);
     }
@@ -316,7 +329,7 @@ static void anlys_fun_head(fun_head_node_t *node) {
 
     syment_t *e = symget2(parent, fname);
     if (e) {
-        rescue(DUPSYM, "L%d: function %s already declared.", idp->line, idp->name);
+        rescue(DUPSYM, "line %d: function %s already declared.", idp->line, idp->name);
     } else {
         e = syminit2(parent, idp, fname);
     }
@@ -337,7 +350,7 @@ static param_t* anlys_para_list(para_list_node_t *node) {
             ident_node_t *idp = p->idp;
             syment_t *e = symget(idp->name);
             if (e) {
-                rescue(DUPSYM, "L%d: parameter %s already declared.", idp->line, idp->name);
+                rescue(DUPSYM, "line %d: parameter %s already declared.", idp->line, idp->name);
             } else {
                 e = syminit(idp);
             }
@@ -410,7 +423,7 @@ static void anlys_assign_stmt(assign_stmt_node_t *node) {
     } else {
         e = symfind(idp->name);
         if (!e) {
-            giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+            giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
         }
     }
 
@@ -452,7 +465,7 @@ static void anlys_for_stmt(for_stmt_node_t *node) {
     ident_node_t *idp = node->idp;
     syment_t *e = symfind(idp->name);
     if (!e) {
-        giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+        giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
     }
     idp->symbol = e;
 
@@ -467,17 +480,25 @@ static void anlys_for_stmt(for_stmt_node_t *node) {
 }
 
 static void anlys_pcall_stmt(pcall_stmt_node_t *node) {
+    syment_t *e;
+
     ident_node_t *idp = node->idp;
     char pname[MAXSTRLEN];
-    strncpy(pname, idp->name, MAXSTRLEN);
-    make_symkey2(pname, node->alp);
 
-    syment_t *e = symfind(pname);
+    strncpy(pname, idp->name, MAXSTRLEN);
+    make_symkey2(pname, node->alp, false);
+    e = symfind(pname);
     if (!e) {
-        giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+        strncpy(pname, idp->name, MAXSTRLEN);
+        make_symkey2(pname, node->alp, true);
+        e = symfind(pname);
+    }
+
+    if (!e) {
+        giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
     }
     if (e->cate != PROC_OBJ) {
-        giveup(BADSYM, "L%d: procedure %s not found.", idp->line, idp->name);
+        giveup(BADSYM, "line %d: procedure %s not found.", idp->line, idp->name);
     }
     idp->symbol = e;
 
@@ -493,7 +514,7 @@ static void anlys_read_stmt(read_stmt_node_t *node) {
         ident_node_t *idp = t->idp;
         syment_t *e = symfind(idp->name);
         if (!e) {
-            giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+            giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
         }
         idp->symbol = e;
     }
@@ -541,7 +562,7 @@ static void anlys_factor(factor_node_t *node) {
             idp = node->idp;
             e = symfind(idp->name);
             if (!e) {
-                giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+                giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
             }
             switch (e->cate) {
                 case CONSTANT_OBJ:
@@ -551,7 +572,7 @@ static void anlys_factor(factor_node_t *node) {
                 case BY_REFERENCE_OBJ:
                     break;
                 default:
-                    giveup(BADCTG, "L%d: symbol %s category is bad.", idp->line, idp->name);
+                    giveup(BADCTG, "line %d: symbol %s category is bad.", idp->line, idp->name);
             }
             idp->symbol = e;
             break;
@@ -560,10 +581,10 @@ static void anlys_factor(factor_node_t *node) {
             idp = node->idp;
             e = symfind(idp->name);
             if (!e) {
-                giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+                giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
             }
             if (e->cate != ARRAY_OBJ) {
-                giveup(ERTYPE, "L%d: symbol %s type is not array.", idp->line, idp->name);
+                giveup(ERTYPE, "line %d: symbol %s type is not array.", idp->line, idp->name);
             }
             idp->symbol = e;
 
@@ -588,20 +609,29 @@ static void anlys_factor(factor_node_t *node) {
 }
 
 static void anlys_fcall_stmt(fcall_stmt_node_t *node) {
+    syment_t *e;
+
     node->stab = scope_top();
     nevernil(node->idp);
 
     ident_node_t *idp = node->idp;
     char fname[MAXSTRLEN];
-    strncpy(fname, idp->name, MAXSTRLEN);
-    make_symkey2(fname, node->alp);
 
-    syment_t *e = symfind(fname);
+    strncpy(fname, idp->name, MAXSTRLEN);
+    make_symkey2(fname, node->alp, false);
+    e = symfind(fname);
+
+    if (!e) {
+        strncpy(fname, idp->name, MAXSTRLEN);
+        make_symkey2(fname, node->alp, true);
+        e = symfind(fname);
+    }
+
     if (!e) {
         giveup(BADSYM, "line %d: function %s not found.", idp->line, idp->name);
     }
     if (e->cate != FUNCTION_OBJ) {
-        giveup(ERTYPE, "L%d: symbol %s type is not function.", idp->line, idp->name);
+        giveup(ERTYPE, "line %d: symbol %s type is not function.", idp->line, idp->name);
     }
     idp->symbol = e;
 
@@ -659,18 +689,18 @@ static void anlys_arg_list(syment_t *sign, arg_list_node_t *node) {
                     goto refok;
                 }
 referr:
-                giveup(BADREF, "L%d: %s() arg%d has bad reference.", sign->lineno, sign->name, pos);
+                giveup(BADREF, "line %d: %s() arg%d has bad reference.", sign->lineno, sign->name, pos);
                 continue;
 refok:
                 a = symfind(idp->name);
                 if (!a) {
-                    giveup(BADSYM, "L%d: symbol %s not found.", idp->line, idp->name);
+                    giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
                 }
                 if (fp->kind == ID_FACTOR && a->cate != VARIABLE_OBJ) {
-                    giveup(OBJREF, "L%d: %s() arg%d is not variable object.", idp->line, idp->name, pos);
+                    giveup(OBJREF, "line %d: %s() arg%d is not variable object.", idp->line, idp->name, pos);
                 }
                 if (fp->kind == ARRAY_FACTOR && a->cate != ARRAY_OBJ) {
-                    giveup(OBJREF, "L%d: %s() arg%d is not array object.", idp->line, idp->name, pos);
+                    giveup(OBJREF, "line %d: %s() arg%d is not array object.", idp->line, idp->name, pos);
                 }
                 t->argsym = idp->symbol = a;
                 t->refsym = e;
@@ -681,7 +711,7 @@ refok:
     }
 
     if (t || p) {
-        giveup(BADLEN, "L%d: %s(...) arguments and parameters length not equal.", sign->lineno, sign->name);
+        giveup(BADLEN, "line %d: %s(...) arguments and parameters length not equal.", sign->lineno, sign->name);
     }
 }
 

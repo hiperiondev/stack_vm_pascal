@@ -1,5 +1,5 @@
 /*
- * @ syntax.h
+ * @syntax.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -267,10 +267,7 @@ struct _factor_node {
     factor_t kind;
     ident_node_t *idp;
     expr_node_t *ep;
-    // value: store unsigned int or char
-    bool sign;
-    int32_t value;
-    uint32_t uvalue;
+    long int value;
     fcall_stmt_node_t *fcsp;
     symtab_t *stab;
 };

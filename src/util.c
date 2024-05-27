@@ -1,5 +1,5 @@
 /*
- * @ util.c
+ * @util.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -67,18 +67,18 @@ bool chkcmd(char *cmd) {
     char path[MAXSTRBUF];
     while (fgets(path, sizeof(path) - 1, fp) != NULL) {
         pclose(fp);
-        return TRUE;
+        return true;
     }
 
     if (feof(fp)) {
-        return FALSE;
+        return false;
     } else {
-        return TRUE;
+        return true;
     }
 
     pclose(fp);
 
-    return TRUE;
+    return true;
 }
 
 // convert bit to char array
@@ -106,7 +106,7 @@ void bclr(bits_t bits[], int i) {
 
 // get bit
 bool bget(bits_t bits[], int i) {
-    return bits[POS(i)] & MASK(i) ? TRUE : FALSE;
+    return bits[POS(i)] & MASK(i) ? true : false;
 }
 
 // clear all bits
@@ -130,10 +130,10 @@ bool bsame(bits_t a[], bits_t b[], int n) {
     int i;
     for (i = 0; i < n; ++i) {
         if (a[i] ^ b[i]) {
-            return FALSE;
+            return false;
         }
     }
-    return TRUE;
+    return true;
 }
 
 // duplicate set

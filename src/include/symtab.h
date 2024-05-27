@@ -1,5 +1,5 @@
 /*
- * @ symtab.h
+ * @symtab.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -50,11 +50,12 @@ typedef enum _sym_cate_enum {
 
 // symbol type
 typedef enum _sym_type_enum {
-    VOID_TYPE,        // 0x00
-    INT_TYPE,         // 0x01
-    UINT_TYPE,        // 0x02
-    CHAR_TYPE,        // 0x03
-    STRING_TYPE       // 0x04
+    VOID_TYPE,    // 0x00
+    INT_TYPE,     // 0x01
+    UINT_TYPE,    // 0x02
+    CHAR_TYPE,    // 0x03
+    STRING_TYPE,  // 0x04
+    LITERAL_TYPE, // 0x05
 } type_t;
 
 // signature for procedure and function

@@ -1,5 +1,5 @@
 /*
- * @ optim_dag.c
+ * @optim_dag.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -49,12 +49,12 @@ static bool check_dagable(bb_t *bb) {
             case WRITE_INT_OP:
             case WRITE_UINT_OP:
             case WRITE_CHAR_OP:
-                return FALSE;
+                return false;
             default:
                 continue;
         }
     }
-    return TRUE;
+    return true;
 }
 
 // create DAG node
@@ -239,7 +239,7 @@ static void gen_curr_node(bb_t *bb, dnode_t *n) {
         panic("DAG_REGEN_INSTRUCTION_OVERFLOW");
     }
     bb->insts2[bb->inst2cnt++] = x;
-    n->generated = TRUE;
+    n->generated = true;
 }
 
 // re-generate instructions

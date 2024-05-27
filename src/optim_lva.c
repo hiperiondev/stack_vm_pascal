@@ -1,5 +1,5 @@
 /*
- * @ optim_lva.c
+ * @optim_lva.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -28,9 +28,9 @@ bool isvar(syment_t *e) {
         case TEMP_OBJ:
         case BY_VALUE_OBJ:
         case BY_REFERENCE_OBJ:
-            return TRUE;
+            return true;
         default:
-            return FALSE;
+            return false;
     }
 }
 
@@ -209,12 +209,12 @@ static void dump_in_out(fun_t *fun) {
 
 // Data Flow Analysis (Backward)
 static void data_flow_anlys(fun_t *fun) {
-    bool changed = TRUE; // flag, loop if IN set is changed
+    bool changed = true; // flag, loop if IN set is changed
     int epoch = 1;	     // which iteration round?
 
     while (changed) {
         dbg("epoch=%d\n", epoch);
-        changed = FALSE;
+        changed = false;
 
         dump_in_out(fun);
 
@@ -243,7 +243,7 @@ static void data_flow_anlys(fun_t *fun) {
 
             // check exit condition
             if (!ssame(bb->in, old_in)) {
-                changed = TRUE;
+                changed = true;
             }
         }
 

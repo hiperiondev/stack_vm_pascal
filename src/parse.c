@@ -1,5 +1,5 @@
 /*
- * @ parse.c
+ * @parse.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -864,8 +864,7 @@ static factor_node_t* parse_factor(void) {
     switch (currtok) {
         case MC_UNS:
             t->kind = UNSIGN_FACTOR;
-            t->sign = false;
-            t->uvalue = atol(tokbuf);
+            t->value = atol(tokbuf);
             match(MC_UNS);
             break;
         case MC_CH:
@@ -1001,9 +1000,9 @@ static para_def_node_t* parse_para_def(void) {
     NEWNODE(para_def_node_t, t);
 
     // VAR mean call by reference
-    bool byref = FALSE;
+    bool byref = false;
     if (TOKANY(KW_VAR)) {
-        byref = TRUE;
+        byref = true;
         match(KW_VAR);
     }
 

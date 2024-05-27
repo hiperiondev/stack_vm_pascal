@@ -1,5 +1,5 @@
 /*
- * @ main.c
+ * @main.c
  *
  * @brief Pascal for Stack VM
  * @details

@@ -1,5 +1,5 @@
 /*
- * @ scan.h
+ * @scan.h
  *
  * @brief Pascal for Stack VM
  * @details

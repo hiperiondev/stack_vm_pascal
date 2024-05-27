@@ -1,5 +1,5 @@
 /*
- * @ lexical.h
+ * @lexical.h
  *
  * @brief Pascal for Stack VM
  * @details

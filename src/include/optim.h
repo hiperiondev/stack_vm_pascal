@@ -1,5 +1,5 @@
 /*
- * @ optim.h
+ * @optim.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -116,16 +116,16 @@ typedef enum dnode_cate_enum {
 
 struct _dag_node_struct {
     // common
-    int nid; // node ID
-    dnode_cate_t cate;
+    int nid;           // node ID
+    dnode_cate_t cate; // category
 
     // attributes for operation node
-    op_t op;      // operation
-    dnode_t *lhs; // left hand side
-    dnode_t *rhs; // right hand side
+    op_t op;           // operation
+    dnode_t *lhs;      // left hand side
+    dnode_t *rhs;      // right hand side
 
     // attributes for symbol node
-    syment_t *syment;
+    syment_t *syment;  // symbol entry
 
     // control parameters
     dnvar_t *reflist; // reference to symbol entry

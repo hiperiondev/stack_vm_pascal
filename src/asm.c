@@ -1,5 +1,5 @@
 /*
- * @ asm.c
+ * @asm.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ir.h"
 #include "common.h"
 #include "debug.h"
 #include "global.h"
@@ -42,11 +43,12 @@ static const char *category[] = {
 };
 
 static const char *value_type[] = {
-        "VOID",  //
-        "INT",   //
-        "UINT",  //
-        "CHAR",  //
-        "STRING" //
+        "VOID",   // 0
+        "INT",    // 1
+        "UINT",   // 2
+        "CHAR",   // 3
+        "STRING", // 4
+        "LITERAL" // 5
 };
 
 /*
@@ -185,7 +187,7 @@ static void fn_numbers(symtab_t *table, uint32_t ident) {
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == NUMBER_OBJ)
-                printf("%*s%s %u %u ; %s %s\n", ident + 2, "", e->label, e->type, (int)e->initval, e->name, value_type[e->type]);
+                printf("%*s%s %ld ; LITERAL\n", ident + 2, "", e->label, e->initval);
         }
     }
     printf("%*s[end number]\n", ident, "");
