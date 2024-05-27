@@ -1,5 +1,5 @@
 /*
- * @optim_cfg.c
+ * @optimize_cfg.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -16,7 +16,7 @@
  */
 
 #include "common.h"
-#include "optim.h"
+#include "optimize.h"
 #include "debug.h"
 #include "ir.h"
 #include "limits.h"

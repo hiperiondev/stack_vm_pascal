@@ -1,5 +1,5 @@
 /*
- * @optim_lva.c
+ * @optimize_lva.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -17,7 +17,7 @@
 
 #include "ir.h"
 #include "limits.h"
-#include "optim.h"
+#include "optimize.h"
 #include "symtab.h"
 #include "util.h"
 

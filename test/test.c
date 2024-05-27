@@ -18,9 +18,9 @@
 #include <stdint.h>
 
 #include "init.h"
-#include "anlys.h"
-#include "asm.h"
-#include "gen.h"
+#include "anlysis.h"
+#include "assembler.h"
+#include "generate.h"
 #include "global.h"
 #include "scan.h"
 #include "parse.h"

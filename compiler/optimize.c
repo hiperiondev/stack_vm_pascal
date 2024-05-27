@@ -1,5 +1,5 @@
 /*
- * @optim.c
+ * @optimize.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,7 +15,7 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#include "optim.h"
+#include "optimize.h"
 
 extern void **memtrack;
 extern unsigned long memtrack_qty;

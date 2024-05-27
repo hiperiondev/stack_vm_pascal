@@ -1,5 +1,5 @@
 /*
- * @gen.h
+ * @assembler.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,12 +15,9 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef _GEN_H_
-#define _GEN_H_
+#ifndef _ASM_H_
+#define _ASM_H_
 
-#include "parse.h"
-#include "symtab.h"
+void genasm(void);
 
-void genir(pgm_node_t *_pgm);
-
-#endif /*  _GEN_H_ */
+#endif /* _ASM_H_ */

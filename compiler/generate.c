@@ -1,5 +1,5 @@
 /*
- * @gen.c
+ * @generate.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,7 +15,7 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#include "gen.h"
+#include "generate.h"
 #include "limits.h"
 #include "util.h"
 #include "debug.h"

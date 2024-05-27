@@ -1,5 +1,5 @@
 /*
- * @asm.c
+ * @assembler.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -23,7 +23,7 @@
 #include "debug.h"
 #include "global.h"
 #include "symtab.h"
-#include "asm.h"
+#include "assembler.h"
 
 #define ENABLE_COMMENTS
 //#define ENABLE_DEBUG

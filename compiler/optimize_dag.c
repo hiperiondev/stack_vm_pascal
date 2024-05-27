@@ -1,5 +1,5 @@
 /*
- * @optim_dag.c
+ * @optimize_dag.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -19,7 +19,7 @@
 #include "debug.h"
 #include "ir.h"
 #include "limits.h"
-#include "optim.h"
+#include "optimize.h"
 #include "symtab.h"
 
 extern void **memtrack;

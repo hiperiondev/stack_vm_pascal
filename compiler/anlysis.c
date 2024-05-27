@@ -1,5 +1,5 @@
 /*
- * @anlys.c
+ * @anlysis.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -16,7 +16,7 @@
  */
 
 #include "error.h"
-#include "anlys.h"
+#include "anlysis.h"
 #include "global.h"
 #include "debug.h"
 #include "limits.h"
