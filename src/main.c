@@ -22,7 +22,6 @@
 #include "asm.h"
 #include "gen.h"
 #include "global.h"
-#include "post.h"
 #include "scan.h"
 #include "parse.h"
 
@@ -49,15 +48,9 @@ int main(int argc, char *argv[]) {
     // generate target code
     genasm();
 
-    // post works
-    //post_nasm();
-    //post_link();
-    //post_clean();
-
     for (unsigned long n = 0; n < memtrack_qty; n++)
         free(memtrack[n]);
     free(memtrack);
 
-    msg("done\n");
     return 0;
 }

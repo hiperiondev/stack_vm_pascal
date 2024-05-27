@@ -25,7 +25,7 @@
 #include "symtab.h"
 #include "asm.h"
 
-//#define ENABLE_COMMENTS
+#define ENABLE_COMMENTS
 
 #define PIDENT(x) printf(";%*s", (int)strlen(x), "")
 
