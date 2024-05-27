@@ -146,8 +146,8 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
         return;
     printf("%*s[arg]\n", ident, "");
     while (head != NULL) {
-        printf("%*s%s %u %u ; %s %s %s (%s)\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type, head->symbol->name,
-                category[head->symbol->cate], value_type[head->symbol->type], head->symbol->label);
+        printf("%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type, head->symbol->name,
+                category[head->symbol->cate], value_type[head->symbol->type]);
         head = head->next;
     }
     printf("%*s[end arg]\n", ident, "");
@@ -160,7 +160,7 @@ static void fn_locales(symtab_t *table, uint32_t ident) {
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == VARIABLE_OBJ || e->cate == ARRAY_OBJ)
-                printf("%*s%s %u %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, (int) e->initval, e->name,
+                printf("%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name,
                         category[e->cate], value_type[e->type]);
         }
     }
@@ -350,7 +350,7 @@ static void asmbl_store_array_op(inst_t *instruction) {
 
 static void asmbl_branch_equ_op(inst_t *instruction) {
     PIDENT(opcode[instruction->op]);
-    printf("labl%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("labl arg1 arg2\n");
     printf("%s ", opcode[instruction->op]);
     printf("%s %s %s", instruction->d->label, instruction->r->label, instruction->s->label);
 
@@ -361,7 +361,7 @@ static void asmbl_branch_equ_op(inst_t *instruction) {
 
 static void asmbl_branch_neq_op(inst_t *instruction) {
     PIDENT(opcode[instruction->op]);
-    printf("labl%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("labl arg1 arg2\n");
     printf("%s ", opcode[instruction->op]);
     printf("%s %s %s", instruction->d->label, instruction->r->label, instruction->s->label);
 
@@ -372,7 +372,7 @@ static void asmbl_branch_neq_op(inst_t *instruction) {
 
 static void asmbl_branch_gtt_op(inst_t *instruction) {
     PIDENT(opcode[instruction->op]);
-    printf("labl%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("labl arg1 arg2\n");
     printf("%s ", opcode[instruction->op]);
     printf("%s %s %s", instruction->d->label, instruction->r->label, instruction->s->label);
 
@@ -383,7 +383,7 @@ static void asmbl_branch_gtt_op(inst_t *instruction) {
 
 static void asmbl_branch_geq_op(inst_t *instruction) {
     PIDENT(opcode[instruction->op]);
-    printf("labl%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("labl arg1 arg2\n");
     printf("%s ", opcode[instruction->op]);
     printf("%s %s %s", instruction->d->label, instruction->r->label, instruction->s->label);
 
@@ -394,7 +394,7 @@ static void asmbl_branch_geq_op(inst_t *instruction) {
 
 static void asmbl_branch_lst_op(inst_t *instruction) {
     PIDENT(opcode[instruction->op]);
-    printf("labl%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("labl arg1 arg2\n");
     printf("%s ", opcode[instruction->op]);
     printf("%s %s %s", instruction->d->label, instruction->r->label, instruction->s->label);
 
@@ -405,7 +405,7 @@ static void asmbl_branch_lst_op(inst_t *instruction) {
 
 static void asmbl_branch_leq_op(inst_t *instruction) {
     PIDENT(opcode[instruction->op]);
-    printf("labl%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("labl arg1 arg2\n");
     printf("%s ", opcode[instruction->op]);
     printf("%s %s %s", instruction->d->label, instruction->r->label, instruction->s->label);
 
