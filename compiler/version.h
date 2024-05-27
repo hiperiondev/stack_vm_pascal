@@ -1,5 +1,5 @@
 /*
- * @anlys.h
+ * @version.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,13 +15,14 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef _ANLYSIS_H_
-#define _ANLYSIS_H_
+#ifndef _VERSION_H_
+#define _VERSION_H_
 
-#include "global.h"
-#include "parse.h"
-#include "symtab.h"
+#define COMPILER_VERSION_MAYOR 0
+#define COMPILER_VERSION_MINOR 1
+#define COMPILER_VERSION_PATCH 0
 
-void analysis(pgm_node_t *pgm);
+#define STRINGIFY(x) #x
+#define COMPILER_VERSION(A,B,C) "v" STRINGIFY(A) "." STRINGIFY(B) "." STRINGIFY(C)
 
-#endif /* _ANLYSIS_H_ */
+#endif /* _VERSION_H_ */

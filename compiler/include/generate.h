@@ -15,12 +15,12 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef _GEN_H_
-#define _GEN_H_
+#ifndef _GENERATE_H_
+#define _GENERATE_H_
 
 #include "parse.h"
 #include "symtab.h"
 
 void genir(pgm_node_t *_pgm);
 
-#endif /*  _GEN_H_ */
+#endif /* _GENERATE_H_ */

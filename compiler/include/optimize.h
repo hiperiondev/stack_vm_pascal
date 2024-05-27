@@ -15,8 +15,8 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef _OPTIM_H_
-#define _OPTIM_H_
+#ifndef _OPTIMIZE_H_
+#define _OPTIMIZE_H_
 
 #include "limits.h"
 #include "ir.h"
@@ -157,4 +157,4 @@ void lva_optim(void);
 // optimize entry
 void optim(void);
 
-#endif /* _OPTIM_H_ */
+#endif /* _OPTIMIZE_H_ */

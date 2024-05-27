@@ -26,10 +26,11 @@
 #include "global.h"
 #include "limits.h"
 #include "util.h"
+#include "version.h"
 
 // constants
 char PL0E_NAME[MAXSTRLEN] = "stack_vm_pascal";
-char PL0E_VERSION[MAXSTRLEN] = "v0.0.1";
+char PL0E_VERSION[MAXSTRLEN] = COMPILER_VERSION(COMPILER_VERSION_MAYOR,COMPILER_VERSION_MINOR,COMPILER_VERSION_PATCH);
 char PL0E_INPUT[MAXSTRLEN] = "input.pas";
 char PL0E_ASSEM[MAXSTRLEN] = "input.s";
 char PL0E_OBJECT[MAXSTRLEN] = "input.o";
@@ -38,8 +39,6 @@ char PL0E_TARGET[MAXSTRLEN] = "a.out";
 // options
 bool PL0E_OPT_QUIET = false;
 bool PL0E_OPT_VERBOSE = false;
-bool PL0E_OPT_KEEP_NASM_FILE = false;
-bool PL0E_OPT_KEEP_OBJECT_FILE = false;
 bool PL0E_OPT_SET_TARGET_NAME = false;
 
 // debug
@@ -66,14 +65,6 @@ void pl0c_read_args(int argc, char *argv[]) {
             PL0E_OPT_VERBOSE = true;
             echo = true;
             silent = false;
-            continue;
-        }
-        if (!strcmp("-s", argv[i])) {
-            PL0E_OPT_KEEP_NASM_FILE = true;
-            continue;
-        }
-        if (!strcmp("-c", argv[i])) {
-            PL0E_OPT_KEEP_OBJECT_FILE = true;
             continue;
         }
         if (!strcmp("-o", argv[i])) {

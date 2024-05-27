@@ -15,9 +15,9 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef _ASM_H_
-#define _ASM_H_
+#ifndef _ASSEMBLER_H_
+#define _ASSEMBLER_H_
 
 void genasm(void);
 
-#endif /* _ASM_H_ */
+#endif /* _ASSEMBLER_H_ */
