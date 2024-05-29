@@ -25,7 +25,7 @@
 #include "symtab.h"
 #include "assembler.h"
 
-#define ENABLE_COMMENTS
+//#define ENABLE_COMMENTS
 //#define ENABLE_DEBUG
 
 #define PIDENT(x) printf(";%*s", (int)strlen(x), "")
@@ -44,7 +44,7 @@ static const char *category[] = {
         "LABEL",        //
         "NUMBER",       //
         "STRING",       //
-};
+        };
 
 static const char *value_type[] = {
         "VOID",   // 0
@@ -53,8 +53,11 @@ static const char *value_type[] = {
         "CHAR",   // 3
         "STRING", // 4
         "LITERAL" // 5
-};
+        };
 #endif
+
+fn_elements_t *fn_elements;
+long int fn_elements_qty;
 
 #ifdef ENABLE_DEBUG
 static void print_table(symtab_t *table) {
@@ -141,7 +144,7 @@ static void print_args(inst_t *instruction) {
 #endif
 
 ///////////////////// instructions /////////////////////
-#ifdef ENABLE_COMMENTS
+
 static void fn_args(syment_t *symbol, uint32_t ident) {
     if (symbol == NULL)
         return;
@@ -149,68 +152,147 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
     param_t *head = symbol->phead;
     if (head == NULL)
         return;
+
+#ifdef ENABLE_COMMENTS
     printf(";%*s[arg]\n", ident, "");
+#endif
+
     while (head != NULL) {
-        printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type, head->symbol->name,
-                category[head->symbol->cate], value_type[head->symbol->type]);
+        fn_elements[fn_elements_qty].args = realloc(fn_elements[fn_elements_qty].args, (fn_elements[fn_elements_qty].args_qty + 1) * sizeof(fn_args_t));
+
+        strcpy(fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].name, head->symbol->name);
+        strcpy(fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].label, head->symbol->label);
+        fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].type = head->symbol->type;
+        fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].category = head->symbol->cate == BY_VALUE_OBJ ? 0 : 1;
+        ++fn_elements[fn_elements_qty].args_qty;
+
+#ifdef ENABLE_COMMENTS
+        printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type,
+                head->symbol->name, category[head->symbol->cate], value_type[head->symbol->type]);
+#endif
         head = head->next;
     }
+#ifdef ENABLE_COMMENTS
     printf(";%*s[end arg]\n", ident, "");
+#endif
 }
 
 static void fn_locales(symtab_t *table, uint32_t ident) {
+#ifdef ENABLE_COMMENTS
     printf(";%*s[locale]\n", ident, "");
+#endif
+
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            if (e->cate == VARIABLE_OBJ || e->cate == ARRAY_OBJ)
-                printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name,
-                        category[e->cate], value_type[e->type]);
+            if (e->cate == VARIABLE_OBJ || e->cate == ARRAY_OBJ) {
+                fn_elements[fn_elements_qty].locales = realloc(fn_elements[fn_elements_qty].locales,
+                        (fn_elements[fn_elements_qty].locales_qty + 1) * sizeof(fn_locales_t));
+                strcpy(fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].name, e->name);
+                strcpy(fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].label, e->label);
+                fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].type = e->type;
+                fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].category = e->cate == ARRAY_OBJ ? 1 : 0;
+                ++fn_elements[fn_elements_qty].locales_qty;
+
+#ifdef ENABLE_COMMENTS
+                printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name, category[e->cate],
+                        value_type[e->type]);
+#endif
+            }
         }
     }
+
+#ifdef ENABLE_COMMENTS
     printf(";%*s[end locale]\n", ident, "");
+#endif
 }
 
 static void fn_temps(symtab_t *table, uint32_t ident) {
+#ifdef ENABLE_COMMENTS
     printf(";%*s[temp]\n", ident, "");
+#endif
+
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            if (e->cate == TEMP_OBJ)
-                printf(";%*s%s %u %u ; %s %s\n", ident + 2, "", e->label, e->type, (int)e->initval, e->name, value_type[e->type]);
+            if (e->cate == TEMP_OBJ) {
+                fn_elements[fn_elements_qty].temps = realloc(fn_elements[fn_elements_qty].temps,
+                        (fn_elements[fn_elements_qty].temps_qty + 1) * sizeof(fn_temps_t));
+                strcpy(fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].name, e->name);
+                strcpy(fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].label, e->label);
+                fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].type = e->type;
+                fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].category = e->cate == ARRAY_OBJ ? 1 : 0;
+                ++fn_elements[fn_elements_qty].temps_qty;
+
+#ifdef ENABLE_COMMENTS
+                printf(";%*s%s %u; %s %s\n", ident + 2, "", e->label, e->type, e->name, value_type[e->type]);
+#endif
+            }
         }
     }
+
+#ifdef ENABLE_COMMENTS
     printf(";%*s[end temp]\n", ident, "");
+#endif
 }
 
 static void fn_literals(symtab_t *table, uint32_t ident) {
+#ifdef ENABLE_COMMENTS
     printf(";%*s[literal]\n", ident, "");
+#endif
+
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            if (e->cate == NUMBER_OBJ)
+            if (e->cate == NUMBER_OBJ) {
+                fn_elements[fn_elements_qty].literals = realloc(fn_elements[fn_elements_qty].literals,
+                        (fn_elements[fn_elements_qty].literals_qty + 1) * sizeof(fn_literals_t));
+                strcpy(fn_elements[fn_elements_qty].literals[fn_elements[fn_elements_qty].literals_qty].label, e->label);
+                fn_elements[fn_elements_qty].literals[fn_elements[fn_elements_qty].literals_qty].value = e->initval;
+                ++fn_elements[fn_elements_qty].literals_qty;
+
+#ifdef ENABLE_COMMENTS
                 printf(";%*s%s %ld\n", ident + 2, "", e->label, e->initval);
+#endif
+            }
         }
     }
+
+#ifdef ENABLE_COMMENTS
     printf(";%*s[end literal]\n", ident, "");
+#endif
 }
 
 static void fn_strings(symtab_t *table, uint32_t ident) {
+#ifdef ENABLE_COMMENTS
     printf(";%*s[string]\n", ident, "");
+#endif
+
     for (int i = 0; i < MAXBUCKETS; ++i) {
         syment_t *hair, *e;
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
-            if (e->cate == STRING_OBJ)
+            if (e->cate == STRING_OBJ) {
+                fn_elements[fn_elements_qty].strings = realloc(fn_elements[fn_elements_qty].strings,
+                        (fn_elements[fn_elements_qty].strings_qty + 1) * sizeof(fn_strings_t));
+                strcpy(fn_elements[fn_elements_qty].strings[fn_elements[fn_elements_qty].strings_qty].label, e->label);
+                strcpy(fn_elements[fn_elements_qty].strings[fn_elements[fn_elements_qty].strings_qty].value, e->str);
+                ++fn_elements[fn_elements_qty].strings_qty;
+
+#ifdef ENABLE_COMMENTS
                 printf(";%*s%s \"%s\"\n", ident + 2, "", e->label, e->str);
+#endif
+            }
         }
     }
+
+#ifdef ENABLE_COMMENTS
     printf(";%*s[end string]\n", ident, "");
-}
 #endif
+}
 
 ////////////////////////////////////////////////////////
 
@@ -222,15 +304,36 @@ static void asmbl_fn_start_op(inst_t *instruction) {
     printf("%s ", opcode[instruction->op]);
     printf("%s %04d %04d %04d %s\n", instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff,
             instruction->d->label);
-#ifdef ENABLE_COMMENTS
+
+    fn_elements = realloc(fn_elements, (fn_elements_qty + 1) * sizeof(fn_elements_t));
+    strcpy(fn_elements[fn_elements_qty].name, instruction->d->name);
+
+    fn_elements[fn_elements_qty].args = malloc(sizeof(fn_args_t));
+    fn_elements[fn_elements_qty].args_qty = 0;
     fn_args(instruction->d, (int) strlen(opcode[instruction->op]));
+
+    fn_elements[fn_elements_qty].locales = malloc(sizeof(fn_locales_t));
+    fn_elements[fn_elements_qty].locales_qty = 0;
     fn_locales(instruction->d->scope, (int) strlen(opcode[instruction->op]));
-    fn_temps(instruction->d->scope, (int) strlen(opcode[instruction->op]));
+
+    fn_elements[fn_elements_qty].literals = malloc(sizeof(fn_literals_t));
+    fn_elements[fn_elements_qty].literals_qty = 0;
     fn_literals(instruction->d->scope, (int) strlen(opcode[instruction->op]));
+
+    fn_elements[fn_elements_qty].temps = malloc(sizeof(fn_temps_t));
+    fn_elements[fn_elements_qty].temps_qty = 0;
+    fn_temps(instruction->d->scope, (int) strlen(opcode[instruction->op]));
+
+    fn_elements[fn_elements_qty].strings = malloc(sizeof(fn_strings_t));
+    fn_elements[fn_elements_qty].strings_qty = 0;
     fn_strings(instruction->d->scope, (int) strlen(opcode[instruction->op]));
 
+    ++fn_elements_qty;
+
+#ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
+
 #ifdef ENABLE_DEBUG
     print_args(instruction);
     printf("\n");
@@ -717,6 +820,8 @@ static void asmbl_label_op(inst_t *instruction) {
 void genasm(void) {
     inst_t *instruction;
     char print_instr[2048];
+    fn_elements = calloc(1, sizeof(fn_elements_t));
+    fn_elements_qty = 0;
 
     for (instruction = xhead; instruction; instruction = instruction->next) {
         memset(print_instr, 0, 2048);
@@ -823,4 +928,57 @@ void genasm(void) {
 
     chkerr("assemble fail and exit.");
     phase = ASSEMBLE;
+
+    printf("\n");
+}
+
+void print_fn_elements(void) {
+    long int fn;
+
+    for (fn = 0; fn < fn_elements_qty; fn++) {
+        for (long int args = 0; args < fn_elements[fn].args_qty; args++) {
+            printf("fn_arg %s %s ", fn_elements[fn].name, fn_elements[fn].args[args].label);
+            printf("%d ", fn_elements[fn].args[args].category);
+            printf("%d ", fn_elements[fn].args[args].type);
+            printf("%s\n", fn_elements[fn].args[args].name);
+        }
+
+        for (long int locales = 0; locales < fn_elements[fn].locales_qty; locales++) {
+            printf("fn_locale %s %s ", fn_elements[fn].name, fn_elements[fn].locales[locales].label);
+            printf("%d ", fn_elements[fn].locales[locales].category);
+            printf("%d ", fn_elements[fn].locales[locales].type);
+            printf("%s\n", fn_elements[fn].locales[locales].name);
+        }
+
+        for (long int temps = 0; temps < fn_elements[fn].temps_qty; temps++) {
+            printf("fn_temp %s %s ", fn_elements[fn].name, fn_elements[fn].temps[temps].label);
+            printf("%d ", fn_elements[fn].temps[temps].category);
+            printf("%d ", fn_elements[fn].temps[temps].type);
+            printf("%s\n", fn_elements[fn].temps[temps].name);
+        }
+
+        for (long int literals = 0; literals < fn_elements[fn].literals_qty; literals++) {
+            printf("fn_literal %s %s ", fn_elements[fn].name, fn_elements[fn].literals[literals].label);
+            printf("%ld\n", fn_elements[fn].literals[literals].value);
+        }
+
+        for (long int strings = 0; strings < fn_elements[fn].strings_qty; strings++) {
+            printf("fn_string %s %s ", fn_elements[fn].name, fn_elements[fn].strings[strings].label);
+            printf("\"%s\"\n", fn_elements[fn].strings[strings].value);
+        }
+
+        printf("\n");
+    }
+}
+
+void free_asm(void) {
+    // free assembler
+    for (long int fn = 0; fn < fn_elements_qty; fn++) {
+        free(fn_elements[fn].args);
+        free(fn_elements[fn].literals);
+        free(fn_elements[fn].locales);
+        free(fn_elements[fn].temps);
+        free(fn_elements[fn].strings);
+    }
+    free(fn_elements);
 }

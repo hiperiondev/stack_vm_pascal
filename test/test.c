@@ -47,6 +47,10 @@ int main(int argc, char *argv[]) {
 
     // generate target code
     genasm();
+    print_fn_elements();
+
+    // free assembler
+    free_asm();
 
     for (unsigned long n = 0; n < memtrack_qty; n++)
         free(memtrack[n]);
