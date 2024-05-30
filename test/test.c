@@ -32,6 +32,8 @@ int main(int argc, char *argv[]) {
     pgm_node_t *res = NULL;
     memtrack = malloc(sizeof(void*));
     memtrack_qty = 0;
+    char *asm_prg = malloc(1);
+    asm_prg[0] = '\0';
 
     // initial
     init(argc, argv);
@@ -46,7 +48,8 @@ int main(int argc, char *argv[]) {
     genir(res);
 
     // generate target code
-    genasm();
+    genasm(&asm_prg);
+    printf("%s\n", asm_prg);
     print_fn_elements();
 
     // free assembler
@@ -55,6 +58,7 @@ int main(int argc, char *argv[]) {
     for (unsigned long n = 0; n < memtrack_qty; n++)
         free(memtrack[n]);
     free(memtrack);
+    free(asm_prg);
 
     return 0;
 }

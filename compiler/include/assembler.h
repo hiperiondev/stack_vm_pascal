@@ -70,7 +70,7 @@ typedef struct fn_elements_s {
 extern fn_elements_t *fn_elements;
 extern long int fn_elements_qty;
 
-void genasm(void);
+void genasm(char **asm_prg);
 void print_fn_elements(void);
 void free_asm(void);
 

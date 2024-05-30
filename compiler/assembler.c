@@ -58,6 +58,7 @@ static const char *value_type[] = {
 
 fn_elements_t *fn_elements;
 long int fn_elements_qty;
+char asm_line[1024] = { '\0' };
 
 #ifdef ENABLE_DEBUG
 static void print_table(symtab_t *table) {
@@ -300,9 +301,10 @@ static void asmbl_fn_start_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("name%*s args vars tmps label\n", (int) strlen(instruction->d->name) - 4, "");
+    printf("%s %s %04d %04d %04d %s\n", opcode[instruction->op], instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff,
+            instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %04d %04d %04d %s\n", instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff,
+    sprintf(asm_line, "%s %s %04d %04d %04d %s\n", opcode[instruction->op], instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff,
             instruction->d->label);
 
     fn_elements = realloc(fn_elements, (fn_elements_qty + 1) * sizeof(fn_elements_t));
@@ -344,9 +346,9 @@ static void asmbl_fn_end_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("name\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->name);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->name);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->name);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -360,9 +362,9 @@ static void asmbl_add_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -376,9 +378,9 @@ static void asmbl_sub_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -392,9 +394,9 @@ static void asmbl_mul_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -408,9 +410,9 @@ static void asmbl_div_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -424,9 +426,9 @@ static void asmbl_inc_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -440,9 +442,9 @@ static void asmbl_dec_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -456,9 +458,9 @@ static void asmbl_neg_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1\n", (int) strlen(instruction->d->label) - 2, "");
+    printf("%s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s\n", instruction->d->label, instruction->r->label);
+    sprintf(asm_line, "%s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -472,9 +474,9 @@ static void asmbl_load_array_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to   arry indx\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -488,9 +490,9 @@ static void asmbl_store_var_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1\n", (int) strlen(instruction->d->label) - 2, "");
+    printf("%s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s\n", instruction->d->label, instruction->r->label);
+    sprintf(asm_line, "%s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -504,9 +506,9 @@ static void asmbl_store_array_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arry val1 indx\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -520,9 +522,9 @@ static void asmbl_branch_equ_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -536,9 +538,9 @@ static void asmbl_branch_neq_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -552,9 +554,9 @@ static void asmbl_branch_gtt_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -568,9 +570,9 @@ static void asmbl_branch_geq_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -584,9 +586,9 @@ static void asmbl_branch_lst_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -600,9 +602,9 @@ static void asmbl_branch_leq_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
+    printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s %s %s\n", instruction->d->label, instruction->r->label, instruction->s->label);
+    sprintf(asm_line, "%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -616,9 +618,9 @@ static void asmbl_jump_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -632,9 +634,9 @@ static void asmbl_push_val_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -648,9 +650,9 @@ static void asmbl_push_addr_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -661,8 +663,9 @@ static void asmbl_push_addr_op(inst_t *instruction) {
 }
 
 static void asmbl_pop_op(inst_t *instruction) {
-    printf("%s\n", opcode[instruction->op]);
+    sprintf(asm_line, "%s\n", opcode[instruction->op]);
 #ifdef ENABLE_COMMENTS
+    printf("%s\n", opcode[instruction->op]);
     printf("\n");
 #endif
 #ifdef ENABLE_DEBUG
@@ -675,9 +678,9 @@ static void asmbl_call_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("func\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->r->name);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->r->name);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->r->name);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -691,9 +694,9 @@ static void asmbl_read_int_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -707,9 +710,9 @@ static void asmbl_read_uint_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -723,9 +726,9 @@ static void asmbl_read_char_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -739,9 +742,9 @@ static void asmbl_write_string_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -755,9 +758,9 @@ static void asmbl_write_int_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -771,9 +774,9 @@ static void asmbl_write_uint_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -787,9 +790,9 @@ static void asmbl_write_char_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -803,9 +806,9 @@ static void asmbl_label_op(inst_t *instruction) {
 #ifdef ENABLE_COMMENTS
     PIDENT(opcode[instruction->op]);
     printf("labl\n");
+    printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
-    printf("%s ", opcode[instruction->op]);
-    printf("%s\n", instruction->d->label);
+    sprintf(asm_line, "%s %s\n", opcode[instruction->op], instruction->d->label);
 #ifdef ENABLE_COMMENTS
     printf("\n");
 #endif
@@ -817,14 +820,14 @@ static void asmbl_label_op(inst_t *instruction) {
 
 ////////////////////////////////////////////////////////
 
-void genasm(void) {
+void genasm(char **asm_prg) {
     inst_t *instruction;
-    char print_instr[2048];
     fn_elements = calloc(1, sizeof(fn_elements_t));
     fn_elements_qty = 0;
 
     for (instruction = xhead; instruction; instruction = instruction->next) {
-        memset(print_instr, 0, 2048);
+        memset(asm_line, 0, 1024);
+
         switch (instruction->op) {
             case ADD_OP:
                 asmbl_add_op(instruction);
@@ -923,7 +926,10 @@ void genasm(void) {
                 unlikely();
         }
 
-        printf("%s", print_instr);
+        if (strlen(asm_line) != 0) {
+            *asm_prg = realloc(*asm_prg, (strlen(*asm_prg) + strlen(asm_line) + 1) * sizeof(char));
+            strcat(*asm_prg, asm_line);
+        }
     }
 
     chkerr("assemble fail and exit.");
