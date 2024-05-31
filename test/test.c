@@ -16,6 +16,7 @@
  */
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "init.h"
 #include "anlysis.h"
@@ -32,8 +33,10 @@ int main(int argc, char *argv[]) {
     pgm_node_t *res = NULL;
     memtrack = malloc(sizeof(void*));
     memtrack_qty = 0;
-    char *asm_prg = malloc(1);
-    asm_prg[0] = '\0';
+    char *asm_prg_str = malloc(1);
+    asm_prg_str[0] = '\0';
+    asm_result_t *asm_result = calloc(1, sizeof(asm_result_t));
+    uint32_t asm_result_len = 0;
 
     // initial
     init(argc, argv);
@@ -48,17 +51,18 @@ int main(int argc, char *argv[]) {
     genir(res);
 
     // generate target code
-    genasm(&asm_prg);
-    printf("%s\n", asm_prg);
+    asm_result_len = genasm(&asm_prg_str, &asm_result);
+    //printf("%s\n", asm_prg_str);
+    print_asm(asm_result, asm_result_len);
+    printf("\n");
     print_fn_elements();
 
     // free assembler
     free_asm();
-
     for (unsigned long n = 0; n < memtrack_qty; n++)
         free(memtrack[n]);
     free(memtrack);
-    free(asm_prg);
+    free(asm_prg_str);
 
     return 0;
 }
