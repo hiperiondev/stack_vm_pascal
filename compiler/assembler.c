@@ -25,14 +25,14 @@
 #include "symtab.h"
 #include "assembler.h"
 
-//#define ENABLE_COMMENTS
 //#define ENABLE_DEBUG
+//#define ENABLE_FULL_DEBUG
 
 #define PIDENT(x)           printf(";%*s", (int)strlen(x), "")
 #define ARG_STR(arg, value) strcpy(asm_result->arg.str, value)
 #define ARG_NUM(arg, value) asm_result->arg.number = value
 
-#if defined(ENABLE_COMMENTS) || defined(ENABLE_DEBUG)
+#if defined(ENABLE_DEBUG) || defined(ENABLE_FULL_DEBUG)
 static const char *category[] = {
         "NOP",          //
         "CONST",        //
@@ -61,7 +61,7 @@ static const char *value_type[] = {
 fn_elements_t *fn_elements;
 long int fn_elements_qty;
 
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
 static void print_table(symtab_t *table) {
     printf("          { symbol table id: %d, depth: %d, name space: %s }\n", table->tid, table->depth, table->nspace);
 
@@ -155,7 +155,7 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
     if (head == NULL)
         return;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[arg]\n", ident, "");
 #endif
 
@@ -168,19 +168,19 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
         fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].category = head->symbol->cate == BY_VALUE_OBJ ? 0 : 1;
         ++fn_elements[fn_elements_qty].args_qty;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
         printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type,
                 head->symbol->name, category[head->symbol->cate], value_type[head->symbol->type]);
 #endif
         head = head->next;
     }
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[end arg]\n", ident, "");
 #endif
 }
 
 static void fn_locales(symtab_t *table, uint32_t ident) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[locale]\n", ident, "");
 #endif
 
@@ -197,7 +197,7 @@ static void fn_locales(symtab_t *table, uint32_t ident) {
                 fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].category = e->cate == ARRAY_OBJ ? 1 : 0;
                 ++fn_elements[fn_elements_qty].locales_qty;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
                 printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name, category[e->cate],
                         value_type[e->type]);
 #endif
@@ -205,13 +205,13 @@ static void fn_locales(symtab_t *table, uint32_t ident) {
         }
     }
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[end locale]\n", ident, "");
 #endif
 }
 
 static void fn_temps(symtab_t *table, uint32_t ident) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[temp]\n", ident, "");
 #endif
 
@@ -228,20 +228,20 @@ static void fn_temps(symtab_t *table, uint32_t ident) {
                 fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].category = e->cate == ARRAY_OBJ ? 1 : 0;
                 ++fn_elements[fn_elements_qty].temps_qty;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
                 printf(";%*s%s %u; %s %s\n", ident + 2, "", e->label, e->type, e->name, value_type[e->type]);
 #endif
             }
         }
     }
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[end temp]\n", ident, "");
 #endif
 }
 
 static void fn_literals(symtab_t *table, uint32_t ident) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[literal]\n", ident, "");
 #endif
 
@@ -256,20 +256,20 @@ static void fn_literals(symtab_t *table, uint32_t ident) {
                 fn_elements[fn_elements_qty].literals[fn_elements[fn_elements_qty].literals_qty].value = e->initval;
                 ++fn_elements[fn_elements_qty].literals_qty;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
                 printf(";%*s%s %ld\n", ident + 2, "", e->label, e->initval);
 #endif
             }
         }
     }
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[end literal]\n", ident, "");
 #endif
 }
 
 static void fn_strings(symtab_t *table, uint32_t ident) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[string]\n", ident, "");
 #endif
 
@@ -284,14 +284,14 @@ static void fn_strings(symtab_t *table, uint32_t ident) {
                 strcpy(fn_elements[fn_elements_qty].strings[fn_elements[fn_elements_qty].strings_qty].value, e->str);
                 ++fn_elements[fn_elements_qty].strings_qty;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
                 printf(";%*s%s \"%s\"\n", ident + 2, "", e->label, e->str);
 #endif
             }
         }
     }
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf(";%*s[end string]\n", ident, "");
 #endif
 }
@@ -299,7 +299,7 @@ static void fn_strings(symtab_t *table, uint32_t ident) {
 ////////////////////////////////////////////////////////
 
 static void asmbl_fn_start_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("name%*s args vars tmps label\n", (int) strlen(instruction->d->name) - 4, "");
     printf("%s %s %04d %04d %04d %s\n", opcode[instruction->op], instruction->d->name, instruction->d->scope->argoff, instruction->d->scope->varoff, instruction->d->scope->tmpoff,
@@ -336,34 +336,34 @@ static void asmbl_fn_start_op(inst_t *instruction, asm_result_t *asm_result) {
 
     ++fn_elements_qty;
 
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
 
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_fn_end_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("name\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->name);
 #endif
     ARG_STR(arg1, instruction->d->name);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_add_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -371,17 +371,17 @@ static void asmbl_add_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_sub_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -389,17 +389,17 @@ static void asmbl_sub_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_mul_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -407,17 +407,17 @@ static void asmbl_mul_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_div_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1 %*sarg2\n", (int) strlen(instruction->d->label) - 2, "", (int) strlen(instruction->d->label) - 4, "");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -425,66 +425,66 @@ static void asmbl_div_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_inc_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_dec_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_neg_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1\n", (int) strlen(instruction->d->label) - 2, "");
     printf("%s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_load_array_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to   arry indx\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -492,34 +492,34 @@ static void asmbl_load_array_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_store_var_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("to%*s arg1\n", (int) strlen(instruction->d->label) - 2, "");
     printf("%s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_store_array_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arry val1 indx\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -527,17 +527,17 @@ static void asmbl_store_array_op(inst_t *instruction, asm_result_t *asm_result) 
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_branch_equ_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -545,17 +545,17 @@ static void asmbl_branch_equ_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_branch_neq_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -563,17 +563,17 @@ static void asmbl_branch_neq_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_branch_gtt_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -581,17 +581,17 @@ static void asmbl_branch_gtt_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_branch_geq_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -599,17 +599,17 @@ static void asmbl_branch_geq_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_branch_lst_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -617,17 +617,17 @@ static void asmbl_branch_lst_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_branch_leq_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl arg1 arg2\n");
     printf("%s %s %s %s\n", opcode[instruction->op], instruction->d->label, instruction->r->label, instruction->s->label);
@@ -635,213 +635,213 @@ static void asmbl_branch_leq_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_jump_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_push_val_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_push_addr_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_pop_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("%s\n", opcode[instruction->op]);
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_call_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("func\n");
     printf("%s %s\n", opcode[instruction->op], instruction->r->name);
 #endif
     ARG_STR(arg1, instruction->r->name);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_read_int_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_read_uint_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_read_char_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_write_string_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_write_int_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_write_uint_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_write_char_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("arg1\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
 }
 
 static void asmbl_label_op(inst_t *instruction, asm_result_t *asm_result) {
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     PIDENT(opcode[instruction->op]);
     printf("labl\n");
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
-#ifdef ENABLE_COMMENTS
+#ifdef ENABLE_DEBUG
     printf("\n");
 #endif
-#ifdef ENABLE_DEBUG
+#ifdef ENABLE_FULL_DEBUG
     print_args(instruction);
     printf("\n");
 #endif
