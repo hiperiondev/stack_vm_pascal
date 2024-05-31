@@ -84,7 +84,7 @@ typedef struct asm_result_s {
 extern fn_elements_t *fn_elements;
 extern long int fn_elements_qty;
 
-uint32_t genasm(char **asm_prg_str, asm_result_t **asm_result);
+uint32_t genasm(asm_result_t **asm_result);
 void print_fn_elements(void);
 void print_asm(asm_result_t *asm_result, uint32_t asm_result_len);
 void free_asm(void);
