@@ -165,7 +165,7 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
         strcpy(fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].name, head->symbol->name);
         strcpy(fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].label, head->symbol->label);
         fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].type = head->symbol->type;
-        fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].category = head->symbol->cate == BY_VALUE_OBJ ? 0 : 1;
+        fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].category = head->symbol->cate;
         ++fn_elements[fn_elements_qty].args_qty;
 
 #ifdef ENABLE_DEBUG
@@ -194,7 +194,7 @@ static void fn_locales(symtab_t *table, uint32_t ident) {
                 strcpy(fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].name, e->name);
                 strcpy(fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].label, e->label);
                 fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].type = e->type;
-                fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].category = e->cate == ARRAY_OBJ ? 1 : 0;
+                fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].category = e->cate;
                 ++fn_elements[fn_elements_qty].locales_qty;
 
 #ifdef ENABLE_DEBUG
@@ -225,7 +225,7 @@ static void fn_temps(symtab_t *table, uint32_t ident) {
                 strcpy(fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].name, e->name);
                 strcpy(fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].label, e->label);
                 fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].type = e->type;
-                fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].category = e->cate == ARRAY_OBJ ? 1 : 0;
+                fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].category = e->cate;
                 ++fn_elements[fn_elements_qty].temps_qty;
 
 #ifdef ENABLE_DEBUG
@@ -353,6 +353,7 @@ static void asmbl_fn_end_op(inst_t *instruction, asm_result_t *asm_result) {
     printf("%s %s\n", opcode[instruction->op], instruction->d->name);
 #endif
     ARG_STR(arg1, instruction->d->name);
+    ARG_STR(arg2, instruction->d->label);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -1080,10 +1081,10 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("%s\n", a.arg1.str);
                 break;
             case FN_START_OP:
-                printf("%s %04d %04d %04d %s\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number, a.arg5.str);
+                printf("%s %d %d %d %s\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number, a.arg5.str);
                 break;
             case FN_END_OP:
-                printf("%s\n", a.arg1.str);
+                printf("%s %s\n", a.arg1.str, a.arg2.str);
                 break;
             case READ_INT_OP:
                 printf("%s\n", a.arg1.str);
