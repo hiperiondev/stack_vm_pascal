@@ -128,10 +128,6 @@ static type_t infer_factor_type(factor_node_t *node) {
             }
             return e->type;
         case UNSIGN_FACTOR:
-            //if (node->sign)
-            //    return INT_TYPE;
-            //else
-            //    return UINT_TYPE;
             return LITERAL_TYPE;
         case CHAR_FACTOR:
             return CHAR_TYPE;
@@ -154,12 +150,12 @@ static void make_symkey(char *key, param_t *phead) {
     }
 }
 
-static void make_symkey2(char *key, arg_list_node_t *arglist, bool lit_to_int) {
+static void make_symkey2(char *key, arg_list_node_t *arglist) {
     arg_list_node_t *a = NULL;
     for (a = arglist; a; a = a->next) {
         type_t typ = infer_expr_type(a->ep);
         if (typ == LITERAL_TYPE) {
-            if (lit_to_int)
+            if (a->ep->kind == NEG_ADDOP)
                 typ = INT_TYPE;
             else
                 typ = UINT_TYPE;
@@ -486,13 +482,8 @@ static void anlys_pcall_stmt(pcall_stmt_node_t *node) {
     char pname[MAXSTRLEN];
 
     strncpy(pname, idp->name, MAXSTRLEN);
-    make_symkey2(pname, node->alp, false);
+    make_symkey2(pname, node->alp);
     e = symfind(pname);
-    if (!e) {
-        strncpy(pname, idp->name, MAXSTRLEN);
-        make_symkey2(pname, node->alp, true);
-        e = symfind(pname);
-    }
 
     if (!e) {
         giveup(BADSYM, "line %d: symbol %s not found.", idp->line, idp->name);
@@ -618,14 +609,8 @@ static void anlys_fcall_stmt(fcall_stmt_node_t *node) {
     char fname[MAXSTRLEN];
 
     strncpy(fname, idp->name, MAXSTRLEN);
-    make_symkey2(fname, node->alp, false);
+    make_symkey2(fname, node->alp);
     e = symfind(fname);
-
-    if (!e) {
-        strncpy(fname, idp->name, MAXSTRLEN);
-        make_symkey2(fname, node->alp, true);
-        e = symfind(fname);
-    }
 
     if (!e) {
         giveup(BADSYM, "line %d: function %s not found.", idp->line, idp->name);

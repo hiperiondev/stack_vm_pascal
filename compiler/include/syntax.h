@@ -325,8 +325,7 @@ struct _ident_node {
     idekind_t kind;
     char name[MAXSTRLEN];
     bool sign;
-    int32_t value;
-    uint32_t uvalue;
+    long int value;
     int length;
     int line;
     syment_t *symbol;

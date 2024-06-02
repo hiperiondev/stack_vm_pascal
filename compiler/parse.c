@@ -183,18 +183,18 @@ static const_def_node_t* parse_const_def(void) {
                 match(SS_PLUS);
                 t->idp->kind = UINT_CONST_IDENT;
                 t->idp->sign = false;
-                t->idp->uvalue = atol(tokbuf);
+                t->idp->value = atol(tokbuf);
                 match(MC_UNS);
                 break;
             case SS_MINUS:
                 match(SS_MINUS);
                 t->idp->kind = INT_CONST_IDENT;
                 t->idp->sign = true;
-                t->idp->value = -atoi(tokbuf);
+                t->idp->value = atoi(tokbuf);
                 match(MC_UNS);
                 break;
             case MC_UNS:
-                t->idp->kind = INT_CONST_IDENT;
+                t->idp->kind = UINT_CONST_IDENT;
                 t->idp->value = atoi(tokbuf);
                 match(MC_UNS);
                 break;
