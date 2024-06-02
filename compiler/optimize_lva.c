@@ -190,10 +190,8 @@ static void dump_use_def(fun_t *fun) {
 }
 
 static void dump_in_out(fun_t *fun) {
-    //int total = fun->total;
-    //int *seqs = fun->seqs;
-
     bb_t *bb;
+
     for (bb = fun->bhead; bb; bb = bb->next) {
         char bm_in[MAXSYMENT] = { }, bm_out[MAXSYMENT] = { };
         make_bitmap(fun, bb->in, bm_in);

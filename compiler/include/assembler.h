@@ -53,6 +53,7 @@ typedef struct fn_strings_s {
 
 typedef struct fn_elements_s {
              char name[1024];
+             char label[1024];
 
         fn_args_t *args;
      fn_locales_t *locales;

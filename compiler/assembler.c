@@ -32,7 +32,6 @@
 #define ARG_STR(arg, value) strcpy(asm_result->arg.str, value)
 #define ARG_NUM(arg, value) asm_result->arg.number = value
 
-#if defined(ENABLE_DEBUG) || defined(ENABLE_FULL_DEBUG)
 static const char *category[] = {
         "NOP",          //
         "CONST",        //
@@ -56,7 +55,6 @@ static const char *value_type[] = {
         "STRING", // 4
         "LITERAL" // 5
         };
-#endif
 
 fn_elements_t *fn_elements;
 long int fn_elements_qty;
@@ -309,10 +307,10 @@ static void asmbl_fn_start_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_NUM(arg2, instruction->d->scope->argoff);
     ARG_NUM(arg3, instruction->d->scope->varoff);
     ARG_NUM(arg4, instruction->d->scope->tmpoff);
-    ARG_STR(arg5, instruction->d->label);
 
     fn_elements = realloc(fn_elements, (fn_elements_qty + 1) * sizeof(fn_elements_t));
     strcpy(fn_elements[fn_elements_qty].name, instruction->d->name);
+    strcpy(fn_elements[fn_elements_qty].label, instruction->d->label);
 
     fn_elements[fn_elements_qty].args = malloc(sizeof(fn_args_t));
     fn_elements[fn_elements_qty].args_qty = 0;
@@ -976,24 +974,26 @@ void print_fn_elements(void) {
     long int fn;
 
     for (fn = 0; fn < fn_elements_qty; fn++) {
+        printf("fn_label %s %s\n", fn_elements[fn].name, fn_elements[fn].label);
+
         for (long int args = 0; args < fn_elements[fn].args_qty; args++) {
             printf("fn_arg %s %s ", fn_elements[fn].name, fn_elements[fn].args[args].label);
-            printf("%d ", fn_elements[fn].args[args].category);
-            printf("%d ", fn_elements[fn].args[args].type);
+            printf("%s ", category[fn_elements[fn].args[args].category]);
+            printf("%s ", value_type[fn_elements[fn].args[args].type]);
             printf("%s\n", fn_elements[fn].args[args].name);
         }
 
         for (long int locales = 0; locales < fn_elements[fn].locales_qty; locales++) {
             printf("fn_locale %s %s ", fn_elements[fn].name, fn_elements[fn].locales[locales].label);
-            printf("%d ", fn_elements[fn].locales[locales].category);
-            printf("%d ", fn_elements[fn].locales[locales].type);
+            printf("%s ", category[fn_elements[fn].locales[locales].category]);
+            printf("%s ", category[fn_elements[fn].locales[locales].type]);
             printf("%s\n", fn_elements[fn].locales[locales].name);
         }
 
         for (long int temps = 0; temps < fn_elements[fn].temps_qty; temps++) {
             printf("fn_temp %s %s ", fn_elements[fn].name, fn_elements[fn].temps[temps].label);
-            printf("%d ", fn_elements[fn].temps[temps].category);
-            printf("%d ", fn_elements[fn].temps[temps].type);
+            printf("%s ", category[fn_elements[fn].temps[temps].category]);
+            printf("%s ", category[fn_elements[fn].temps[temps].type]);
             printf("%s\n", fn_elements[fn].temps[temps].name);
         }
 
@@ -1081,7 +1081,7 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("%s\n", a.arg1.str);
                 break;
             case FN_START_OP:
-                printf("%s %d %d %d %s\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number, a.arg5.str);
+                printf("%s %d %d %d\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number);
                 break;
             case FN_END_OP:
                 printf("%s %s\n", a.arg1.str, a.arg2.str);

@@ -270,24 +270,31 @@ syment_t* syminit2(symtab_t *stab, ident_node_t *idp, char *key) {
             e->type = VOID_TYPE;
     }
 
-    sprintf(e->label, "L%03d", e->sid);
     switch (e->cate) {
         case NOP_OBJ:
         case CONSTANT_OBJ:
+            sprintf(e->label, "CNS%03d", e->sid);
             // no need allocation
             break;
         case VARIABLE_OBJ:
+            sprintf(e->label, "VBL%03d", e->sid);
+            e->off = stab->varoff;
+            stab->varoff++;
+            break;
         case PROC_OBJ:
         case FUNCTION_OBJ:
+            sprintf(e->label, "FUN%03d", e->sid);
             e->off = stab->varoff;
             stab->varoff++;
             break;
         case BY_VALUE_OBJ:
         case BY_REFERENCE_OBJ:
+            sprintf(e->label, "VAL%03d", e->sid);
             e->off = stab->argoff;
             stab->argoff++;
             break;
         case ARRAY_OBJ:
+            sprintf(e->label, "ARR%03d", e->sid);
             e->off = stab->varoff;
             stab->varoff += e->arrlen;
             break;
@@ -308,17 +315,20 @@ syment_t* symalloc(symtab_t *stab, char *name, cate_t cate, type_t type) {
     e->cate = cate;
     e->type = type;
 
-    sprintf(e->label, "T%03d", e->sid);
     switch (e->cate) {
+        case NUMBER_OBJ:
+            sprintf(e->label, "LIT%03d", e->sid);
+            break;
         case TEMP_OBJ:
             // from now on, we will NEVER alloc local variables so just
             // alloc temporary variables
+            sprintf(e->label, "TMP%03d", e->sid);
             e->off = stab->varoff + stab->tmpoff;
             stab->tmpoff++;
             break;
         case LABEL_OBJ:
-        case NUMBER_OBJ:
         case STRING_OBJ:
+            sprintf(e->label, "TMP%03d", e->sid);
             // label/number/string never use bytes
             break;
         default:
