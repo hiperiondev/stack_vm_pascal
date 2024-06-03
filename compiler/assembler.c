@@ -307,6 +307,7 @@ static void asmbl_fn_start_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_NUM(arg2, instruction->d->scope->argoff);
     ARG_NUM(arg3, instruction->d->scope->varoff);
     ARG_NUM(arg4, instruction->d->scope->tmpoff);
+    ARG_STR(arg5, instruction->d->label);
 
     fn_elements = realloc(fn_elements, (fn_elements_qty + 1) * sizeof(fn_elements_t));
     strcpy(fn_elements[fn_elements_qty].name, instruction->d->name);
@@ -666,6 +667,8 @@ static void asmbl_push_val_op(inst_t *instruction, asm_result_t *asm_result) {
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
+    ARG_NUM(arg2, instruction->d->type);
+    ARG_NUM(arg3, instruction->d->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -1069,7 +1072,10 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("%s\n", a.arg1.str);
                 break;
             case PUSH_VAL_OP:
-                printf("%s\n", a.arg1.str);
+                if (a.arg2.number == LITERAL_TYPE)
+                    printf("%d\n", a.arg3.number);
+                else
+                    printf("%s\n", a.arg1.str);
                 break;
             case PUSH_ADDR_OP:
                 printf("%s\n", a.arg1.str);
@@ -1081,10 +1087,10 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("%s\n", a.arg1.str);
                 break;
             case FN_START_OP:
-                printf("%s %d %d %d\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number);
+                printf("%s %d %d %d %s\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number, a.arg5.str);
                 break;
             case FN_END_OP:
-                printf("%s %s\n", a.arg1.str, a.arg2.str);
+                printf("%s %s\n\n", a.arg1.str, a.arg2.str);
                 break;
             case READ_INT_OP:
                 printf("%s\n", a.arg1.str);

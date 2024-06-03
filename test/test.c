@@ -52,7 +52,6 @@ int main(int argc, char *argv[]) {
     // generate target code
     asm_result_len = genasm(&asm_result);
     print_asm(asm_result, asm_result_len);
-    printf("\n");
     print_fn_elements();
 
     //optimize code

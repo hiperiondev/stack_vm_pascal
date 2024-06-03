@@ -303,11 +303,19 @@ static syment_t* gen_expr(expr_node_t *node) {
     d = r = e = NULL;
     for (t = node; t; t = t->next) {
         r = gen_term(t->tp);
+
         if (!d) {
             switch (t->kind) {
                 case NEG_ADDOP:
-                    d = symalloc(node->stab, "@expr/neg", TEMP_OBJ, r->type);
-                    emit2(NEG_OP, d, r);
+                    if (r->type == LITERAL_TYPE) {
+                        d = symalloc(node->stab, "@expr/neg", NUMBER_OBJ, LITERAL_TYPE);
+                        d->type = LITERAL_TYPE;
+                        d->cate = NUMBER_OBJ;
+                        d->initval = -r->initval;
+                    } else {
+                        d = symalloc(node->stab, "@expr/neg", TEMP_OBJ, r->type);
+                        emit2(NEG_OP, d, r);
+                    }
                     break;
                 case NOP_ADDOP:
                     d = r;
@@ -317,6 +325,7 @@ static syment_t* gen_expr(expr_node_t *node) {
             }
             continue;
         }
+
         switch (t->kind) {
             case NOP_ADDOP:
             case ADD_ADDOP:
