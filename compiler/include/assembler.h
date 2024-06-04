@@ -69,7 +69,7 @@ typedef struct fn_elements_s {
 } fn_elements_t;
 
 typedef union asm_value_u {
-    uint32_t number;
+    long int number;
         char str[MAXSTRINGLEN];
 } asm_value_t;
 
@@ -80,6 +80,9 @@ typedef struct asm_result_s {
     asm_value_t arg3;
     asm_value_t arg4;
     asm_value_t arg5;
+    asm_value_t arg6;
+    asm_value_t arg7;
+    asm_value_t arg8;
 } asm_result_t;
 
 extern fn_elements_t *fn_elements;

@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
     for (unsigned long n = 0; n < memtrack_qty; n++)
         free(memtrack[n]);
     free(memtrack);
+    free(asm_result);
 
     return 0;
 }

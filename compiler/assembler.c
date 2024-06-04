@@ -371,6 +371,10 @@ static void asmbl_add_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -389,6 +393,10 @@ static void asmbl_sub_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -407,6 +415,10 @@ static void asmbl_mul_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -425,6 +437,10 @@ static void asmbl_div_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -492,6 +508,10 @@ static void asmbl_load_array_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -509,6 +529,8 @@ static void asmbl_store_var_op(inst_t *instruction, asm_result_t *asm_result) {
 #endif
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
+    ARG_NUM(arg3, instruction->r->type);
+    ARG_NUM(arg4, instruction->r->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -527,6 +549,10 @@ static void asmbl_store_array_op(inst_t *instruction, asm_result_t *asm_result) 
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -545,6 +571,10 @@ static void asmbl_branch_equ_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -563,6 +593,10 @@ static void asmbl_branch_neq_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -581,6 +615,10 @@ static void asmbl_branch_gtt_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -599,6 +637,10 @@ static void asmbl_branch_geq_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -617,6 +659,10 @@ static void asmbl_branch_lst_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -635,6 +681,10 @@ static void asmbl_branch_leq_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_STR(arg1, instruction->d->label);
     ARG_STR(arg2, instruction->r->label);
     ARG_STR(arg3, instruction->s->label);
+    ARG_NUM(arg4, instruction->r->type);
+    ARG_NUM(arg5, instruction->r->initval);
+    ARG_NUM(arg6, instruction->s->type);
+    ARG_NUM(arg7, instruction->s->initval);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -712,6 +762,10 @@ static void asmbl_call_op(inst_t *instruction, asm_result_t *asm_result) {
     printf("%s %s\n", opcode[instruction->op], instruction->r->name);
 #endif
     ARG_STR(arg1, instruction->r->name);
+    if (instruction->d != NULL)
+        ARG_STR(arg2, instruction->d->label);
+    else
+        ARG_STR(arg2, "");
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -792,6 +846,9 @@ static void asmbl_write_int_op(inst_t *instruction, asm_result_t *asm_result) {
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
+    ARG_NUM(arg2, instruction->d->type);
+    ARG_NUM(arg3, instruction->d->initval);
+    ARG_NUM(arg4, instruction->d->cate);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -808,6 +865,9 @@ static void asmbl_write_uint_op(inst_t *instruction, asm_result_t *asm_result) {
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
+    ARG_NUM(arg2, instruction->d->type);
+    ARG_NUM(arg3, instruction->d->initval);
+    ARG_NUM(arg4, instruction->d->cate);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -824,6 +884,9 @@ static void asmbl_write_char_op(inst_t *instruction, asm_result_t *asm_result) {
     printf("%s %s\n", opcode[instruction->op], instruction->d->label);
 #endif
     ARG_STR(arg1, instruction->d->label);
+    ARG_NUM(arg2, instruction->d->type);
+    ARG_NUM(arg3, instruction->d->initval);
+    ARG_NUM(arg4, instruction->d->cate);
 #ifdef ENABLE_DEBUG
     printf("\n");
 #endif
@@ -1000,10 +1063,10 @@ void print_fn_elements(void) {
             printf("%s\n", fn_elements[fn].temps[temps].name);
         }
 
-        for (long int literals = 0; literals < fn_elements[fn].literals_qty; literals++) {
-            printf("fn_literal %s %s ", fn_elements[fn].name, fn_elements[fn].literals[literals].label);
-            printf("%ld\n", fn_elements[fn].literals[literals].value);
-        }
+        //for (long int literals = 0; literals < fn_elements[fn].literals_qty; literals++) {
+        //    printf("fn_literal %s %s ", fn_elements[fn].name, fn_elements[fn].literals[literals].label);
+        //    printf("%ld\n", fn_elements[fn].literals[literals].value);
+        //}
 
         for (long int strings = 0; strings < fn_elements[fn].strings_qty; strings++) {
             printf("fn_string %s %s ", fn_elements[fn].name, fn_elements[fn].strings[strings].label);
@@ -1021,16 +1084,52 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
         printf("%s ", opcode[a.op]);
         switch (a.op) {
             case ADD_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case SUB_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case MUL_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case DIV_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case INC_OP:
                 printf("%s\n", a.arg1.str);
@@ -1042,38 +1141,113 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("%s %s\n", a.arg1.str, a.arg2.str);
                 break;
             case LOAD_ARRAY_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case STORE_VAR_OP:
-                printf("%s %s\n", a.arg1.str, a.arg2.str);
+                if (a.arg3.number == LITERAL_TYPE)
+                    printf("%s %ld\n", a.arg1.str, a.arg4.number);
+                else
+                    printf("%s %s\n", a.arg1.str, a.arg2.str);
                 break;
             case STORE_ARRAY_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case BRANCH_EQU_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case BRANCH_NEQ_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case BRANCH_GTT_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case BRANCH_GEQ_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case BRANCH_LST_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case BRANCH_LEQ_OP:
-                printf("%s %s %s\n", a.arg1.str, a.arg2.str, a.arg3.str);
+                printf("%s ", a.arg1.str);
+                if (a.arg4.number == LITERAL_TYPE)
+                    printf("%ld ", a.arg5.number);
+                else
+                    printf("%s ", a.arg2.str);
+
+                if (a.arg6.number == LITERAL_TYPE)
+                    printf("%ld \n", a.arg7.number);
+                else
+                    printf("%s \n", a.arg3.str);
                 break;
             case JUMP_OP:
                 printf("%s\n", a.arg1.str);
                 break;
             case PUSH_VAL_OP:
                 if (a.arg2.number == LITERAL_TYPE)
-                    printf("%d\n", a.arg3.number);
+                    printf("%ld\n", a.arg3.number);
                 else
                     printf("%s\n", a.arg1.str);
                 break;
@@ -1084,10 +1258,10 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("\n");
                 break;
             case CALL_OP:
-                printf("%s\n", a.arg1.str);
+                printf("%s %s\n", a.arg1.str, a.arg2.str);
                 break;
             case FN_START_OP:
-                printf("%s %d %d %d %s\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number, a.arg5.str);
+                printf("%s %ld %ld %ld %s\n", a.arg1.str, a.arg2.number, a.arg3.number, a.arg4.number, a.arg5.str);
                 break;
             case FN_END_OP:
                 printf("%s %s\n\n", a.arg1.str, a.arg2.str);
@@ -1102,19 +1276,34 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
                 printf("%s\n", a.arg1.str);
                 break;
             case WRITE_STRING_OP:
-                printf("%s\n", a.arg1.str);
+                if (a.arg2.number == LITERAL_TYPE)
+                    printf("%ld\n", a.arg3.number);
+                else
+                    printf("%s\n", a.arg1.str);
                 break;
             case WRITE_INT_OP:
-                printf("%s\n", a.arg1.str);
+                if (a.arg4.number == NUMBER_OBJ)
+                    printf("%ld\n", a.arg3.number);
+                else
+                    printf("%s\n", a.arg1.str);
                 break;
             case WRITE_UINT_OP:
-                printf("%s\n", a.arg1.str);
+                if (a.arg4.number == NUMBER_OBJ)
+                    printf("%ld\n", a.arg3.number);
+                else
+                    printf("%s\n", a.arg1.str);
                 break;
             case WRITE_CHAR_OP:
-                printf("%s\n", a.arg1.str);
+                if (a.arg4.number == NUMBER_OBJ)
+                    printf("%ld\n", a.arg3.number);
+                else
+                    printf("%s\n", a.arg1.str);
                 break;
             case LABEL_OP:
-                printf("%s\n", a.arg1.str);
+                if (a.arg2.number == LITERAL_TYPE)
+                    printf("%ld\n", a.arg3.number);
+                else
+                    printf("%s\n", a.arg1.str);
                 break;
         }
 
