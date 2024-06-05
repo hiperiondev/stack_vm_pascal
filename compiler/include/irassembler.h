@@ -1,5 +1,5 @@
 /*
- * @assembler.h
+ * @irassembler.h
  *
  * @brief Pascal for Stack VM
  * @details
@@ -15,59 +15,59 @@
  * @see https://github.com/hiperiondev/stack_vm_pascal
  */
 
-#ifndef _ASSEMBLER_H_
-#define _ASSEMBLER_H_
+#ifndef _IRASSEMBLER_H_
+#define _IRASSEMBLER_H_
 
 #define MAXSTRINGLEN 8192
 
-typedef struct fn_args_s {
+typedef struct fn_ir_args_s {
        char label[1024];
        char name[1024];
     uint8_t category;
     uint8_t type;
-} fn_args_t;
+} fn_ir_args_t;
 
-typedef struct fn_locales_s {
+typedef struct fn_ir_locales_s {
        char label[1024];
        char name[1024];
     uint8_t category;
     uint8_t type;
-} fn_locales_t;
+} fn_ir_locales_t;
 
-typedef struct fn_temps_s {
+typedef struct fn_ir_temps_s {
        char label[1024];
        char name[1024];
     uint8_t category;
     uint8_t type;
-} fn_temps_t;
+} fn_ir_temps_t;
 
-typedef struct fn_strings_s {
+typedef struct fn_ir_strings_s {
     char label[1024];
     char value[MAXSTRINGLEN];
-} fn_strings_t;
+} fn_ir_strings_t;
 
-typedef struct fn_elements_s {
+typedef struct fn_ir_elements_s {
              char name[1024];
              char label[1024];
 
-        fn_args_t *args;
-     fn_locales_t *locales;
-       fn_temps_t *temps;
-     fn_strings_t *strings;
+        fn_ir_args_t *args;
+     fn_ir_locales_t *locales;
+       fn_ir_temps_t *temps;
+     fn_ir_strings_t *strings;
 
          long int args_qty;
          long int locales_qty;
          long int temps_qty;
          long int literals_qty;
          long int strings_qty;
-} fn_elements_t;
+} fn_ir_elements_t;
 
-typedef union asm_value_u {
+typedef union irasm_value_u {
     long int number;
         char str[MAXSTRINGLEN];
 } asm_value_t;
 
-typedef struct asm_result_s {
+typedef struct irasm_result_s {
     uint8_t op;
     asm_value_t arg1;
     asm_value_t arg2;
@@ -79,12 +79,12 @@ typedef struct asm_result_s {
     asm_value_t arg8;
 } asm_result_t;
 
-extern fn_elements_t *fn_elements;
-extern long int fn_elements_qty;
+extern fn_ir_elements_t *fn_ir_elements;
+extern long int fn_ir_elements_qty;
 
-uint32_t genasm(asm_result_t **asm_result);
-void print_fn_elements(void);
-void print_asm(asm_result_t *asm_result, uint32_t asm_result_len);
-void free_asm(void);
+uint32_t gen_irasm(asm_result_t **irasm_result);
+void print_ir_fn_elements(void);
+void print_irasm(asm_result_t *irasm_result, uint32_t irasm_result_len);
+void free_irasm(void);
 
-#endif /* _ASSEMBLER_H_ */
+#endif /* _IRASSEMBLER_H_ */

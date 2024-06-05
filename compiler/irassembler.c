@@ -1,5 +1,5 @@
 /*
- * @assembler.c
+ * @irassembler.c
  *
  * @brief Pascal for Stack VM
  * @details
@@ -23,7 +23,7 @@
 #include "debug.h"
 #include "global.h"
 #include "symtab.h"
-#include "assembler.h"
+#include "irassembler.h"
 
 //#define ENABLE_DEBUG
 //#define ENABLE_FULL_DEBUG
@@ -56,8 +56,8 @@ static const char *value_type[] = {
         "LITERAL" // 5
         };
 
-fn_elements_t *fn_elements;
-long int fn_elements_qty;
+fn_ir_elements_t *fn_ir_elements;
+long int fn_ir_elements_qty;
 
 #ifdef ENABLE_FULL_DEBUG
 static void print_table(symtab_t *table) {
@@ -158,13 +158,13 @@ static void fn_args(syment_t *symbol, uint32_t ident) {
 #endif
 
     while (head != NULL) {
-        fn_elements[fn_elements_qty].args = realloc(fn_elements[fn_elements_qty].args, (fn_elements[fn_elements_qty].args_qty + 1) * sizeof(fn_args_t));
+        fn_ir_elements[fn_ir_elements_qty].args = realloc(fn_ir_elements[fn_ir_elements_qty].args, (fn_ir_elements[fn_ir_elements_qty].args_qty + 1) * sizeof(fn_ir_args_t));
 
-        strcpy(fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].name, head->symbol->name);
-        strcpy(fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].label, head->symbol->label);
-        fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].type = head->symbol->type;
-        fn_elements[fn_elements_qty].args[fn_elements[fn_elements_qty].args_qty].category = head->symbol->cate;
-        ++fn_elements[fn_elements_qty].args_qty;
+        strcpy(fn_ir_elements[fn_ir_elements_qty].args[fn_ir_elements[fn_ir_elements_qty].args_qty].name, head->symbol->name);
+        strcpy(fn_ir_elements[fn_ir_elements_qty].args[fn_ir_elements[fn_ir_elements_qty].args_qty].label, head->symbol->label);
+        fn_ir_elements[fn_ir_elements_qty].args[fn_ir_elements[fn_ir_elements_qty].args_qty].type = head->symbol->type;
+        fn_ir_elements[fn_ir_elements_qty].args[fn_ir_elements[fn_ir_elements_qty].args_qty].category = head->symbol->cate;
+        ++fn_ir_elements[fn_ir_elements_qty].args_qty;
 
 #ifdef ENABLE_DEBUG
         printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", head->symbol->label, head->symbol->cate == BY_VALUE_OBJ ? 0 : 1, head->symbol->type,
@@ -187,13 +187,13 @@ static void fn_locales(symtab_t *table, uint32_t ident) {
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == VARIABLE_OBJ || e->cate == ARRAY_OBJ) {
-                fn_elements[fn_elements_qty].locales = realloc(fn_elements[fn_elements_qty].locales,
-                        (fn_elements[fn_elements_qty].locales_qty + 1) * sizeof(fn_locales_t));
-                strcpy(fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].name, e->name);
-                strcpy(fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].label, e->label);
-                fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].type = e->type;
-                fn_elements[fn_elements_qty].locales[fn_elements[fn_elements_qty].locales_qty].category = e->cate;
-                ++fn_elements[fn_elements_qty].locales_qty;
+                fn_ir_elements[fn_ir_elements_qty].locales = realloc(fn_ir_elements[fn_ir_elements_qty].locales,
+                        (fn_ir_elements[fn_ir_elements_qty].locales_qty + 1) * sizeof(fn_ir_locales_t));
+                strcpy(fn_ir_elements[fn_ir_elements_qty].locales[fn_ir_elements[fn_ir_elements_qty].locales_qty].name, e->name);
+                strcpy(fn_ir_elements[fn_ir_elements_qty].locales[fn_ir_elements[fn_ir_elements_qty].locales_qty].label, e->label);
+                fn_ir_elements[fn_ir_elements_qty].locales[fn_ir_elements[fn_ir_elements_qty].locales_qty].type = e->type;
+                fn_ir_elements[fn_ir_elements_qty].locales[fn_ir_elements[fn_ir_elements_qty].locales_qty].category = e->cate;
+                ++fn_ir_elements[fn_ir_elements_qty].locales_qty;
 
 #ifdef ENABLE_DEBUG
                 printf(";%*s%s %u %u ; %s %s %s\n", ident + 2, "", e->label, e->cate == ARRAY_OBJ ? 1 : 0, e->type, e->name, category[e->cate],
@@ -218,13 +218,13 @@ static void fn_temps(symtab_t *table, uint32_t ident) {
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == TEMP_OBJ) {
-                fn_elements[fn_elements_qty].temps = realloc(fn_elements[fn_elements_qty].temps,
-                        (fn_elements[fn_elements_qty].temps_qty + 1) * sizeof(fn_temps_t));
-                strcpy(fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].name, e->name);
-                strcpy(fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].label, e->label);
-                fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].type = e->type;
-                fn_elements[fn_elements_qty].temps[fn_elements[fn_elements_qty].temps_qty].category = e->cate;
-                ++fn_elements[fn_elements_qty].temps_qty;
+                fn_ir_elements[fn_ir_elements_qty].temps = realloc(fn_ir_elements[fn_ir_elements_qty].temps,
+                        (fn_ir_elements[fn_ir_elements_qty].temps_qty + 1) * sizeof(fn_ir_temps_t));
+                strcpy(fn_ir_elements[fn_ir_elements_qty].temps[fn_ir_elements[fn_ir_elements_qty].temps_qty].name, e->name);
+                strcpy(fn_ir_elements[fn_ir_elements_qty].temps[fn_ir_elements[fn_ir_elements_qty].temps_qty].label, e->label);
+                fn_ir_elements[fn_ir_elements_qty].temps[fn_ir_elements[fn_ir_elements_qty].temps_qty].type = e->type;
+                fn_ir_elements[fn_ir_elements_qty].temps[fn_ir_elements[fn_ir_elements_qty].temps_qty].category = e->cate;
+                ++fn_ir_elements[fn_ir_elements_qty].temps_qty;
 
 #ifdef ENABLE_DEBUG
                 printf(";%*s%s %u; %s %s\n", ident + 2, "", e->label, e->type, e->name, value_type[e->type]);
@@ -248,11 +248,11 @@ static void fn_strings(symtab_t *table, uint32_t ident) {
         hair = &table->buckets[i];
         for (e = hair->next; e; e = e->next) {
             if (e->cate == STRING_OBJ) {
-                fn_elements[fn_elements_qty].strings = realloc(fn_elements[fn_elements_qty].strings,
-                        (fn_elements[fn_elements_qty].strings_qty + 1) * sizeof(fn_strings_t));
-                strcpy(fn_elements[fn_elements_qty].strings[fn_elements[fn_elements_qty].strings_qty].label, e->label);
-                strcpy(fn_elements[fn_elements_qty].strings[fn_elements[fn_elements_qty].strings_qty].value, e->str);
-                ++fn_elements[fn_elements_qty].strings_qty;
+                fn_ir_elements[fn_ir_elements_qty].strings = realloc(fn_ir_elements[fn_ir_elements_qty].strings,
+                        (fn_ir_elements[fn_ir_elements_qty].strings_qty + 1) * sizeof(fn_ir_strings_t));
+                strcpy(fn_ir_elements[fn_ir_elements_qty].strings[fn_ir_elements[fn_ir_elements_qty].strings_qty].label, e->label);
+                strcpy(fn_ir_elements[fn_ir_elements_qty].strings[fn_ir_elements[fn_ir_elements_qty].strings_qty].value, e->str);
+                ++fn_ir_elements[fn_ir_elements_qty].strings_qty;
 
 #ifdef ENABLE_DEBUG
                 printf(";%*s%s \"%s\"\n", ident + 2, "", e->label, e->str);
@@ -281,27 +281,27 @@ static void asmbl_fn_start_op(inst_t *instruction, asm_result_t *asm_result) {
     ARG_NUM(arg4, instruction->d->scope->tmpoff);
     ARG_STR(arg5, instruction->d->label);
 
-    fn_elements = realloc(fn_elements, (fn_elements_qty + 1) * sizeof(fn_elements_t));
-    strcpy(fn_elements[fn_elements_qty].name, instruction->d->name);
-    strcpy(fn_elements[fn_elements_qty].label, instruction->d->label);
+    fn_ir_elements = realloc(fn_ir_elements, (fn_ir_elements_qty + 1) * sizeof(fn_ir_elements_t));
+    strcpy(fn_ir_elements[fn_ir_elements_qty].name, instruction->d->name);
+    strcpy(fn_ir_elements[fn_ir_elements_qty].label, instruction->d->label);
 
-    fn_elements[fn_elements_qty].args = malloc(sizeof(fn_args_t));
-    fn_elements[fn_elements_qty].args_qty = 0;
+    fn_ir_elements[fn_ir_elements_qty].args = malloc(sizeof(fn_ir_args_t));
+    fn_ir_elements[fn_ir_elements_qty].args_qty = 0;
     fn_args(instruction->d, (int) strlen(opcode[instruction->op]));
 
-    fn_elements[fn_elements_qty].locales = malloc(sizeof(fn_locales_t));
-    fn_elements[fn_elements_qty].locales_qty = 0;
+    fn_ir_elements[fn_ir_elements_qty].locales = malloc(sizeof(fn_ir_locales_t));
+    fn_ir_elements[fn_ir_elements_qty].locales_qty = 0;
     fn_locales(instruction->d->scope, (int) strlen(opcode[instruction->op]));
 
-    fn_elements[fn_elements_qty].temps = malloc(sizeof(fn_temps_t));
-    fn_elements[fn_elements_qty].temps_qty = 0;
+    fn_ir_elements[fn_ir_elements_qty].temps = malloc(sizeof(fn_ir_temps_t));
+    fn_ir_elements[fn_ir_elements_qty].temps_qty = 0;
     fn_temps(instruction->d->scope, (int) strlen(opcode[instruction->op]));
 
-    fn_elements[fn_elements_qty].strings = malloc(sizeof(fn_strings_t));
-    fn_elements[fn_elements_qty].strings_qty = 0;
+    fn_ir_elements[fn_ir_elements_qty].strings = malloc(sizeof(fn_ir_strings_t));
+    fn_ir_elements[fn_ir_elements_qty].strings_qty = 0;
     fn_strings(instruction->d->scope, (int) strlen(opcode[instruction->op]));
 
-    ++fn_elements_qty;
+    ++fn_ir_elements_qty;
 
 #ifdef ENABLE_DEBUG
     printf("\n");
@@ -882,118 +882,118 @@ static void asmbl_label_op(inst_t *instruction, asm_result_t *asm_result) {
 
 ////////////////////////////////////////////////////////
 
-uint32_t genasm(asm_result_t **asm_result) {
+uint32_t gen_irasm(asm_result_t **irasm_result) {
     inst_t *instruction;
-    uint32_t asm_result_len = 0;
-    asm_result_t *result = NULL;
+    uint32_t irasm_result_len = 0;
+    asm_result_t *ir_result = NULL;
 
-    fn_elements = calloc(1, sizeof(fn_elements_t));
-    fn_elements_qty = 0;
+    fn_ir_elements = calloc(1, sizeof(fn_ir_elements_t));
+    fn_ir_elements_qty = 0;
 
     for (instruction = xhead; instruction; instruction = instruction->next) {
-        *asm_result = realloc((*asm_result), (asm_result_len + 1) * sizeof(asm_result_t));
-        (*asm_result)[asm_result_len].op = instruction->op;
-        result = &((*asm_result)[asm_result_len]);
+        *irasm_result = realloc((*irasm_result), (irasm_result_len + 1) * sizeof(asm_result_t));
+        (*irasm_result)[irasm_result_len].op = instruction->op;
+        ir_result = &((*irasm_result)[irasm_result_len]);
 
         switch (instruction->op) {
         case ADD_OP:
-            asmbl_add_op(instruction, result);
+            asmbl_add_op(instruction, ir_result);
             break;
         case SUB_OP:
-            asmbl_sub_op(instruction, result);
+            asmbl_sub_op(instruction, ir_result);
             break;
         case MUL_OP:
-            asmbl_mul_op(instruction, result);
+            asmbl_mul_op(instruction, ir_result);
             break;
         case DIV_OP:
-            asmbl_div_op(instruction, result);
+            asmbl_div_op(instruction, ir_result);
             break;
         case INC_OP:
-            asmbl_inc_op(instruction, result);
+            asmbl_inc_op(instruction, ir_result);
             break;
         case DEC_OP:
-            asmbl_dec_op(instruction, result);
+            asmbl_dec_op(instruction, ir_result);
             break;
         case NEG_OP:
-            asmbl_neg_op(instruction, result);
+            asmbl_neg_op(instruction, ir_result);
             break;
         case LOAD_ARRAY_OP:
-            asmbl_load_array_op(instruction, result);
+            asmbl_load_array_op(instruction, ir_result);
             break;
         case STORE_VAR_OP:
-            asmbl_store_var_op(instruction, result);
+            asmbl_store_var_op(instruction, ir_result);
             break;
         case STORE_ARRAY_OP:
-            asmbl_store_array_op(instruction, result);
+            asmbl_store_array_op(instruction, ir_result);
             break;
         case BRANCH_EQU_OP:
-            asmbl_branch_equ_op(instruction, result);
+            asmbl_branch_equ_op(instruction, ir_result);
             break;
         case BRANCH_NEQ_OP:
-            asmbl_branch_neq_op(instruction, result);
+            asmbl_branch_neq_op(instruction, ir_result);
             break;
         case BRANCH_GTT_OP:
-            asmbl_branch_gtt_op(instruction, result);
+            asmbl_branch_gtt_op(instruction, ir_result);
             break;
         case BRANCH_GEQ_OP:
-            asmbl_branch_geq_op(instruction, result);
+            asmbl_branch_geq_op(instruction, ir_result);
             break;
         case BRANCH_LST_OP:
-            asmbl_branch_lst_op(instruction, result);
+            asmbl_branch_lst_op(instruction, ir_result);
             break;
         case BRANCH_LEQ_OP:
-            asmbl_branch_leq_op(instruction, result);
+            asmbl_branch_leq_op(instruction, ir_result);
             break;
         case JUMP_OP:
-            asmbl_jump_op(instruction, result);
+            asmbl_jump_op(instruction, ir_result);
             break;
         case PUSH_VAL_OP:
-            asmbl_push_val_op(instruction,result);
+            asmbl_push_val_op(instruction,ir_result);
             break;
         case PUSH_ADDR_OP:
-            asmbl_push_addr_op(instruction, result);
+            asmbl_push_addr_op(instruction, ir_result);
             break;
         case POP_OP:
-            asmbl_pop_op(instruction, result);
+            asmbl_pop_op(instruction, ir_result);
             break;
         case CALL_OP:
-            asmbl_call_op(instruction, result);
+            asmbl_call_op(instruction, ir_result);
             break;
         case FN_START_OP:
-            asmbl_fn_start_op(instruction, result);
+            asmbl_fn_start_op(instruction, ir_result);
             break;
         case FN_END_OP:
-            asmbl_fn_end_op(instruction, result);
+            asmbl_fn_end_op(instruction, ir_result);
             break;
         case READ_INT_OP:
-            asmbl_read_int_op(instruction, result);
+            asmbl_read_int_op(instruction, ir_result);
             break;
         case READ_UINT_OP:
-            asmbl_read_uint_op(instruction, result);
+            asmbl_read_uint_op(instruction, ir_result);
             break;
         case READ_CHAR_OP:
-            asmbl_read_char_op(instruction, result);
+            asmbl_read_char_op(instruction, ir_result);
             break;
         case WRITE_STRING_OP:
-            asmbl_write_string_op(instruction, result);
+            asmbl_write_string_op(instruction, ir_result);
             break;
         case WRITE_INT_OP:
-            asmbl_write_int_op(instruction, result);
+            asmbl_write_int_op(instruction, ir_result);
             break;
         case WRITE_UINT_OP:
-            asmbl_write_uint_op(instruction, result);
+            asmbl_write_uint_op(instruction, ir_result);
             break;
         case WRITE_CHAR_OP:
-            asmbl_write_char_op(instruction, result);
+            asmbl_write_char_op(instruction, ir_result);
             break;
         case LABEL_OP:
-            asmbl_label_op(instruction, result);
+            asmbl_label_op(instruction, ir_result);
             break;
         default:
             unlikely();
         }
 
-        ++asm_result_len;
+        ++irasm_result_len;
     }
 
     chkerr("assemble fail and exit.");
@@ -1001,49 +1001,49 @@ uint32_t genasm(asm_result_t **asm_result) {
 
     printf("\n");
 
-    return asm_result_len;
+    return irasm_result_len;
 }
 
-void print_fn_elements(void) {
+void print_ir_fn_elements(void) {
     long int fn;
 
-    for (fn = 0; fn < fn_elements_qty; fn++) {
-        printf("fn_label %s %s\n", fn_elements[fn].name, fn_elements[fn].label);
+    for (fn = 0; fn < fn_ir_elements_qty; fn++) {
+        printf("fn_label %s %s\n", fn_ir_elements[fn].name, fn_ir_elements[fn].label);
 
-        for (long int args = 0; args < fn_elements[fn].args_qty; args++) {
-            printf("fn_arg %s %s ", fn_elements[fn].name, fn_elements[fn].args[args].label);
-            printf("%s ", category[fn_elements[fn].args[args].category]);
-            printf("%s ", value_type[fn_elements[fn].args[args].type]);
-            printf("%s\n", fn_elements[fn].args[args].name);
+        for (long int args = 0; args < fn_ir_elements[fn].args_qty; args++) {
+            printf("fn_arg %s %s ", fn_ir_elements[fn].name, fn_ir_elements[fn].args[args].label);
+            printf("%s ", category[fn_ir_elements[fn].args[args].category]);
+            printf("%s ", value_type[fn_ir_elements[fn].args[args].type]);
+            printf("%s\n", fn_ir_elements[fn].args[args].name);
         }
 
-        for (long int locales = 0; locales < fn_elements[fn].locales_qty; locales++) {
-            printf("fn_locale %s %s ", fn_elements[fn].name, fn_elements[fn].locales[locales].label);
-            printf("%s ", category[fn_elements[fn].locales[locales].category]);
-            printf("%s ", category[fn_elements[fn].locales[locales].type]);
-            printf("%s\n", fn_elements[fn].locales[locales].name);
+        for (long int locales = 0; locales < fn_ir_elements[fn].locales_qty; locales++) {
+            printf("fn_locale %s %s ", fn_ir_elements[fn].name, fn_ir_elements[fn].locales[locales].label);
+            printf("%s ", category[fn_ir_elements[fn].locales[locales].category]);
+            printf("%s ", category[fn_ir_elements[fn].locales[locales].type]);
+            printf("%s\n", fn_ir_elements[fn].locales[locales].name);
         }
 
-        for (long int temps = 0; temps < fn_elements[fn].temps_qty; temps++) {
-            printf("fn_temp %s %s ", fn_elements[fn].name, fn_elements[fn].temps[temps].label);
-            printf("%s ", category[fn_elements[fn].temps[temps].category]);
-            printf("%s ", category[fn_elements[fn].temps[temps].type]);
-            printf("%s\n", fn_elements[fn].temps[temps].name);
+        for (long int temps = 0; temps < fn_ir_elements[fn].temps_qty; temps++) {
+            printf("fn_temp %s %s ", fn_ir_elements[fn].name, fn_ir_elements[fn].temps[temps].label);
+            printf("%s ", category[fn_ir_elements[fn].temps[temps].category]);
+            printf("%s ", category[fn_ir_elements[fn].temps[temps].type]);
+            printf("%s\n", fn_ir_elements[fn].temps[temps].name);
         }
 
-        for (long int strings = 0; strings < fn_elements[fn].strings_qty; strings++) {
-            printf("fn_string %s %s ", fn_elements[fn].name, fn_elements[fn].strings[strings].label);
-            printf("\"%s\"\n", fn_elements[fn].strings[strings].value);
+        for (long int strings = 0; strings < fn_ir_elements[fn].strings_qty; strings++) {
+            printf("fn_string %s %s ", fn_ir_elements[fn].name, fn_ir_elements[fn].strings[strings].label);
+            printf("\"%s\"\n", fn_ir_elements[fn].strings[strings].value);
         }
 
         printf("\n");
     }
 }
 
-void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
+void print_irasm(asm_result_t *irasm_result, uint32_t irasm_result_len) {
     asm_result_t a;
-    for (uint32_t line = 0; line < asm_result_len; ++line) {
-        a = asm_result[line];
+    for (uint32_t line = 0; line < irasm_result_len; ++line) {
+        a = irasm_result[line];
         printf("%s ", opcode[a.op]);
         switch (a.op) {
             case ADD_OP:
@@ -1273,13 +1273,13 @@ void print_asm(asm_result_t *asm_result, uint32_t asm_result_len) {
     }
 }
 
-void free_asm(void) {
+void free_irasm(void) {
     // free assembler
-    for (long int fn = 0; fn < fn_elements_qty; fn++) {
-        free(fn_elements[fn].args);
-        free(fn_elements[fn].locales);
-        free(fn_elements[fn].temps);
-        free(fn_elements[fn].strings);
+    for (long int fn = 0; fn < fn_ir_elements_qty; fn++) {
+        free(fn_ir_elements[fn].args);
+        free(fn_ir_elements[fn].locales);
+        free(fn_ir_elements[fn].temps);
+        free(fn_ir_elements[fn].strings);
     }
-    free(fn_elements);
+    free(fn_ir_elements);
 }
