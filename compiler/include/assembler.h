@@ -41,11 +41,6 @@ typedef struct fn_temps_s {
     uint8_t type;
 } fn_temps_t;
 
-typedef struct fn_literals_s {
-        char label[1024];
-    long int value;
-} fn_literals_t;
-
 typedef struct fn_strings_s {
     char label[1024];
     char value[MAXSTRINGLEN];
@@ -58,7 +53,6 @@ typedef struct fn_elements_s {
         fn_args_t *args;
      fn_locales_t *locales;
        fn_temps_t *temps;
-    fn_literals_t *literals;
      fn_strings_t *strings;
 
          long int args_qty;

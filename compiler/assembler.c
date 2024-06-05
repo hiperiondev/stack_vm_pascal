@@ -238,34 +238,6 @@ static void fn_temps(symtab_t *table, uint32_t ident) {
 #endif
 }
 
-static void fn_literals(symtab_t *table, uint32_t ident) {
-#ifdef ENABLE_DEBUG
-    printf(";%*s[literal]\n", ident, "");
-#endif
-
-    for (int i = 0; i < MAXBUCKETS; ++i) {
-        syment_t *hair, *e;
-        hair = &table->buckets[i];
-        for (e = hair->next; e; e = e->next) {
-            if (e->cate == NUMBER_OBJ) {
-                fn_elements[fn_elements_qty].literals = realloc(fn_elements[fn_elements_qty].literals,
-                        (fn_elements[fn_elements_qty].literals_qty + 1) * sizeof(fn_literals_t));
-                strcpy(fn_elements[fn_elements_qty].literals[fn_elements[fn_elements_qty].literals_qty].label, e->label);
-                fn_elements[fn_elements_qty].literals[fn_elements[fn_elements_qty].literals_qty].value = e->initval;
-                ++fn_elements[fn_elements_qty].literals_qty;
-
-#ifdef ENABLE_DEBUG
-                printf(";%*s%s %ld\n", ident + 2, "", e->label, e->initval);
-#endif
-            }
-        }
-    }
-
-#ifdef ENABLE_DEBUG
-    printf(";%*s[end literal]\n", ident, "");
-#endif
-}
-
 static void fn_strings(symtab_t *table, uint32_t ident) {
 #ifdef ENABLE_DEBUG
     printf(";%*s[string]\n", ident, "");
@@ -320,10 +292,6 @@ static void asmbl_fn_start_op(inst_t *instruction, asm_result_t *asm_result) {
     fn_elements[fn_elements_qty].locales = malloc(sizeof(fn_locales_t));
     fn_elements[fn_elements_qty].locales_qty = 0;
     fn_locales(instruction->d->scope, (int) strlen(opcode[instruction->op]));
-
-    fn_elements[fn_elements_qty].literals = malloc(sizeof(fn_literals_t));
-    fn_elements[fn_elements_qty].literals_qty = 0;
-    fn_literals(instruction->d->scope, (int) strlen(opcode[instruction->op]));
 
     fn_elements[fn_elements_qty].temps = malloc(sizeof(fn_temps_t));
     fn_elements[fn_elements_qty].temps_qty = 0;
@@ -1063,11 +1031,6 @@ void print_fn_elements(void) {
             printf("%s\n", fn_elements[fn].temps[temps].name);
         }
 
-        //for (long int literals = 0; literals < fn_elements[fn].literals_qty; literals++) {
-        //    printf("fn_literal %s %s ", fn_elements[fn].name, fn_elements[fn].literals[literals].label);
-        //    printf("%ld\n", fn_elements[fn].literals[literals].value);
-        //}
-
         for (long int strings = 0; strings < fn_elements[fn].strings_qty; strings++) {
             printf("fn_string %s %s ", fn_elements[fn].name, fn_elements[fn].strings[strings].label);
             printf("\"%s\"\n", fn_elements[fn].strings[strings].value);
@@ -1314,7 +1277,6 @@ void free_asm(void) {
     // free assembler
     for (long int fn = 0; fn < fn_elements_qty; fn++) {
         free(fn_elements[fn].args);
-        free(fn_elements[fn].literals);
         free(fn_elements[fn].locales);
         free(fn_elements[fn].temps);
         free(fn_elements[fn].strings);

@@ -21,7 +21,6 @@
 #include "init.h"
 #include "anlysis.h"
 #include "assembler.h"
-#include "assembler_optimizer.h"
 #include "generate.h"
 #include "global.h"
 #include "scan.h"
@@ -53,9 +52,6 @@ int main(int argc, char *argv[]) {
     asm_result_len = genasm(&asm_result);
     print_asm(asm_result, asm_result_len);
     print_fn_elements();
-
-    //optimize code
-    asm_optimize(&asm_result, &asm_result_len);
 
     // free assembler
     free_asm();
