@@ -327,6 +327,8 @@ syment_t* symalloc(symtab_t *stab, char *name, cate_t cate, type_t type) {
             stab->tmpoff++;
             break;
         case LABEL_OBJ:
+            sprintf(e->label, "LBL%03d", e->sid);
+            break;
         case STRING_OBJ:
             sprintf(e->label, "TMP%03d", e->sid);
             // label/number/string never use bytes

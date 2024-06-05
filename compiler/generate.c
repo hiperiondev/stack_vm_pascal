@@ -259,7 +259,6 @@ static void gen_write_stmt(write_stmt_node_t *node) {
             break;
         case ID_WRITE:
             d = gen_expr(node->ep);
-            //printf("type: %d , value: %ld, cate: %d\n", d->type, d->initval, d->cate);
             switch (d->type) {
                 case CHAR_TYPE:
                     emit1(WRITE_CHAR_OP, d);
