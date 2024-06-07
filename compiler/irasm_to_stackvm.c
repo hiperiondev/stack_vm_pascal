@@ -19,11 +19,21 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "ir.h"
+#include "stackvm_opcodes.h"
 #include "irassembler.h"
 #include "irasm_to_stackvm.h"
 
+static void correct_consecutive_operations(asm_result_t *irasm, uint32_t irasm_len, asm_result_t **stackvm_asm, uint32_t *stackvm_asm_len) {
+    uint32_t line;
+
+    for (line = 0; line > irasm_len; line++) {
+
+    }
+
+}
+
 void irasm_to_stackvm(asm_result_t *irasm, uint32_t irasm_len, asm_result_t **stackvm_asm, uint32_t *stackvm_asm_len) {
-    static asm_result_t *asm_result;
-    asm_result = malloc(1);
+    correct_consecutive_operations(irasm, irasm_len, stackvm_asm, stackvm_asm_len);
 
 }

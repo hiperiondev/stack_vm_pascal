@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
     memtrack_qty = 0;
     asm_result_t *irasm = calloc(1, sizeof(asm_result_t));
     uint32_t irasm_len = 0;
-    asm_result_t* stackvm_asm = NULL;
+    asm_result_t* stackvm_asm = malloc(1);
     uint32_t stackvm_asm_len = 0;
 
 

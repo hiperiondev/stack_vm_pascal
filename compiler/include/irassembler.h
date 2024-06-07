@@ -62,21 +62,25 @@ typedef struct fn_ir_elements_s {
          long int strings_qty;
 } fn_ir_elements_t;
 
-typedef union irasm_value_u {
-    long int number;
-        char str[MAXSTRINGLEN];
-} asm_value_t;
+typedef struct irasm_argument_s {
+    bool type; // number, str
+    union {
+        long int number;
+            char str[MAXSTRINGLEN];
+    } value;
+} irasm_argument_t;
 
 typedef struct irasm_result_s {
-    uint8_t op;
-    asm_value_t arg1;
-    asm_value_t arg2;
-    asm_value_t arg3;
-    asm_value_t arg4;
-    asm_value_t arg5;
-    asm_value_t arg6;
-    asm_value_t arg7;
-    asm_value_t arg8;
+             uint8_t op;
+             uint8_t args_qty;
+    irasm_argument_t arg1;
+    irasm_argument_t arg2;
+    irasm_argument_t arg3;
+    irasm_argument_t arg4;
+    irasm_argument_t arg5;
+    irasm_argument_t arg6;
+    irasm_argument_t arg7;
+    irasm_argument_t arg8;
 } asm_result_t;
 
 extern fn_ir_elements_t *fn_ir_elements;
